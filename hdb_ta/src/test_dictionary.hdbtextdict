@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dictionary xmlns="http://www.sap.com/ta/4.0">
+	<entity_category name="ORGANIZATION@COMMERCIAL">
+		<entity_name standard_form="United Parcel Service of America, Incorporated">
+			<variant name="United Parcel Service" />
+			<variant name="U.P.S." type="ABBREV" />
+			<variant name="UPS" />
+			<variant_generation type="standard" language="english" />
+		</entity_name>
+	</entity_category>
+</dictionary>

@@ -1,0 +1,13 @@
+{
+	"welcomeFile": "webapp/index.html",
+	"authenticationMethod": "none",
+	"routes": [
+		{
+		"source":"/node/(.*)",
+		"destination":"node-be",
+		"target":"$1",
+		"authenticationType":"none",
+		"csrfProtection":true
+	}
+	]
+}

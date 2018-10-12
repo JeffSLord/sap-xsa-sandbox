@@ -1,0 +1,3 @@
+service{
+	"sap_xsa_sandbox.hdb_cds::cdsArtifact.DOCUMENTS" as "DOCUMENTS";
+}

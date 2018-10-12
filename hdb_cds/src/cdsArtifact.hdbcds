@@ -1,0 +1,18 @@
+namespace sap_xsa_sandbox.hdb_cds;
+
+@OData.publish : true
+context cdsArtifact {
+
+    /*@@layout{"layoutInfo":{}}*/
+    entity DOCUMENTS {
+        key DOCUMENT_NAME : String(20) not null;
+            ALL_CONTENT   : LargeBinary;
+    };
+
+    /*@@layout{"layoutInfo":{}}*/
+    entity SPLIT {
+        key DOCUMENT_TITLE : String(20) not null;
+        key PAGE_NUMBER    : Integer    not null;
+            PAGE_CONTENT   : LargeBinary;
+    };
+}; 

@@ -1,0 +1,50 @@
+ID: sandbox
+_schema-version: '2.0'
+description: Sandbox environment for testing
+version: 0.0.1
+modules:
+  - name: node
+    type: nodejs
+    path: node
+    provides:
+      - name: node_api
+        properties:
+          url: '${default-url}'
+  - name: ui5
+    type: html5
+    path: ui5
+    requires:
+      - name: node_api
+        group: destinations
+        properties:
+          name: node-be
+          url: '~{url}'
+      - name: hdb_cds
+  - name: hdb_cds
+    type: hdb
+    path: hdb_cds
+    requires:
+      - name: hdi_hdb_cds
+  - name: hdb_ta
+    type: hdb
+    path: hdb_ta
+    requires:
+      - name: hdi_hdb_ta
+  - name: nodexsjs
+    type: nodejs
+    path: nodexsjs
+    provides:
+      - name: nodexsjs_api
+        properties:
+          url: '${default-url}'
+    requires:
+      - name: hdi_hdb_cds
+resources:
+  - name: hdi_hdb_cds
+    properties:
+      hdi-container-name_2: '${service-name}'
+    type: com.sap.xs.hdi-container
+  - name: hdi_hdb_ta
+    properties:
+      hdi-container-name_5: '${service-name}'
+    type: com.sap.xs.hdi-container
