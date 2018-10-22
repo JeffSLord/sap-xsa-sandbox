@@ -1,7 +1,1 @@
-#define COLOR: (blue|red)
-#group MYCOLORS: <COLOR>
-
-#define DIGIT: [0-9]
-#define 3GROUP: \,[0-9][0-9][0-9]
-#subgroup 3DIGIT: (<%(DIGIT){3}>|<%(DIGIT){2}>|<%(DIGIT){1}>)<%(3GROUP)*>
-#subgroup 1DIGIT: <%(DIGIT)>
+#group NUMBER: (<POS:Num>) | (<POS:Num><\,><POS:Num>)
