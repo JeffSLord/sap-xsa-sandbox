@@ -1,7 +1,8 @@
 namespace sap_xsa_sandbox.hdb_cds;
 
 @OData.publish : true
-context cdsArtifact {
+/*@@layout{"layoutInfo":{"x":-236,"y":-43}}*/
+context Docs {
 
     /*@@layout{"layoutInfo":{}}*/
     entity DOCUMENTS {
@@ -15,4 +16,18 @@ context cdsArtifact {
         key PAGE_NUMBER    : Integer    not null;
             PAGE_CONTENT   : LargeBinary;
     };
-}; 
+};
+
+@OData.publish : true
+/*@@layout{"layoutInfo":{"x":-510,"y":-35}}*/
+context Text {
+
+    /*@@layout{"layoutInfo":{"x":-878,"y":-249.5}}*/
+    entity OCR_OUTPUT {
+        key ENTITY          : String(100);
+        key POSITION_LEFT   : Integer;
+        key POSITION_TOP    : Integer;
+        key POSITION_RIGHT  : Integer;
+        key POSITION_BOTTOM : Integer;
+    };
+};
