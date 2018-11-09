@@ -1,3 +1,4 @@
 service{
 	"sap_xsa_sandbox.hdb_cds::cdsArtifact.DOCUMENTS" as "DOCUMENTS";
+	"sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" as "LINES";
 }

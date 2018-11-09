@@ -1,13 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dictionary xmlns="http://www.sap.com/ta/4.0">
+	<entity_category name="COMPETITOR">
+		<entity_name standard_form="Lockheed Martin Corporation">
+			<variant name="Lockheed Martin"></variant>
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="BAE Systems">
+			<variant name="BAE"></variant>
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="L3 Technologies">
+			<variant name="L3"></variant>
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="NAG Marine">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="Sealift Incorporated">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="AECOM Technical Services Incorporated">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="Conrad Shipyard LLC">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="Faith Enterprises Incorporated">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="General Atomics Aeronautical Systems Incorporated">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+		<entity_name standard_form="Northrop Grumman Systems Corporation">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+	</entity_category>
+	
+	<entity_category name="CONTRACT_ACTION">
+		<entity_name standard_form="modification">
+			<variant_generation type="standard" language="english"></variant_generation>
+		</entity_name>
+	</entity_category>
+
+	<entity_category name="KEY_CATEGORY">
+		<entity_name standard_form="Missile">
+			<variant name="Missiles"></variant>
+		</entity_name>
+		<entity_name standard_form="Artificial Intelligence">
+			<variant name="AI"></variant>
+			<variant name="A.I."></variant>
+		</entity_name>
+		<entity_name standard_form="Machine Learning">
+			<variant name="ML"></variant>
+		</entity_name>
+	</entity_category>
+	
+	
+	
+	
 	
 	<entity_category name="COLUMN">
 		<entity_name standard_form="Appropriation"/>
 		<entity_name standard_form="Base"/>
 		<entity_name standard_form="OCO"/>
-		<entity_name standard_form = "Total"/>
+		<entity_name standard_form="Total"/>
 	</entity_category>
-	
 	<entity_category name="APPROPRIATION">
 		<entity_name standard_form="Research, Development, Test &amp; Eval, ?"/>
 		<entity_name standard_form="Operational Test &amp; Eval, Defense"/>
@@ -18,5 +75,4 @@
 		<entity_name standard_form="National Defense Sealift Fund"/>
 		<entity_name standard_form="Total Not in Research, Development, Test &amp; Evaluation"/>
 	</entity_category>
-	
 </dictionary>

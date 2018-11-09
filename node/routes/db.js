@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var hdbext = require("sap/hdbext");
+var hdbext = require("@sap/hdbext");
 
 const hanaConfig = {
 	host: "",

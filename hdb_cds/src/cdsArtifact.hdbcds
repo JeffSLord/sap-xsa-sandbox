@@ -31,3 +31,27 @@ context Text {
         key POSITION_BOTTOM : Integer;
     };
 };
+
+@OData.publish : true
+/*@@layout{"layoutInfo":{"x":-316,"y":-186.5}}*/
+context DocText {
+
+    /*@@layout{"layoutInfo":{"x":-272,"y":-110.5}}*/
+    entity TEXT_OUTPUT {
+        key TITLE : String(20);
+            TEXT  : String(2048);
+    };
+};
+
+@OData.publish : true
+/*@@layout{"layoutInfo":{"x":-559,"y":-36.5}}*/
+context CongressMarks {
+
+    /*@@layout{"layoutInfo":{"x":-436,"y":-104.5}}*/
+    entity LINES {
+        key FILENAME   : String(10) default '0';
+        key PAGENUMBER : Integer    default 0;
+        key LINENUMBER : Integer    default 0;
+            TEXT       : String(1024);
+    };
+};

@@ -27,9 +27,11 @@ app.get("/ip", (req, res) => {
 		
 // 	}
 // };
-app.use("/r1", require("./routes/r1"));
-app.use("/r2", require("./routes/r2"));
+// app.use("/r1", require("./routes/r1"));
+// app.use("/r2", require("./routes/r2"));
 app.use("/ocr", require("./routes/ocr"));
+// app.use("/security", require("./routes/security"));
+
 
 
 // // old version requiring 'target' to be set in xs-app.json

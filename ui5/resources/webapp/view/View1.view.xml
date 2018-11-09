@@ -1,76 +1,90 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sandbox.ui5.controller.View1" displayBlock="true">
 	<App id="idAppControl">
-		
-	<pages>
-		
-	    <Page title="Page" id="__page8" showHeader="false" showFooter="false">
-	        <content>
-	            <NavContainer id="__container5">
-	                <pages>
-	                    <Page title="OCR Extract" id="__page9">
-	                        <content>
-	                        	<FlexBox width="100%" id="__box1" alignItems="Center" alignContent="Center" justifyContent="Center">
-	                            <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" editable="true" id="__form0" layout="ResponsiveGridLayout" width="100%">
-	                                <sap.ui.layout.form:content>
-				            			<!--<sap.ui.layout:HorizontalLayout xmlns:sap.ui.layout="sap.ui.layout" id="__layout0" allowWrapping="true">-->
-				            			    <!--<sap.ui.layout:content>-->
-				            			    <sap.ui.layout:VerticalLayout xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="__layout0">
-				            			        <sap.ui.unified:FileUploader xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns:sap.ui.unified="sap.ui.unified" id="fileUploader" placeholder="Upload pdf" width="auto" name="filename" uploadStart="onUploadStart"/>
-				            			        <RadioButtonGroup xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns="sap.m" width="50%" columns="2" selectedIndex="-1" id="optionButtons">
-				            			            <buttons>
-				            			                <RadioButton selected="true" groupName="__group0" text="txt" id="txtButton"/>
-				            			                <RadioButton groupName="__group0" text="xml" id="xmlButton"/>
-				            			                </buttons>
-				            			            
-				            			        </RadioButtonGroup>
-				            			        <Select xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns="sap.m" xmlns:sap.ui.core="sap.ui.core" selectedKey="1" id="pageSegModeBox" width="50%">
-				            			            <items>
-				            			                <sap.ui.core:ListItem text="0" key="0" id="__item0"/>
-				            			                <sap.ui.core:ListItem text="1" key="1" id="__item1"/>
-				            			                <sap.ui.core:ListItem text="2" key="2" id="__item2"/>
-				            			                <sap.ui.core:ListItem text="3" key="3" id="__item3"/>
-				            			                <sap.ui.core:ListItem text="4" key="4" id="__item4"/>
-				            			                <sap.ui.core:ListItem text="5" key="5" id="__item5"/>
-				            			                <sap.ui.core:ListItem text="6" key="6" id="__item6"/>
-				            			                <sap.ui.core:ListItem text="7" key="7" id="__item7"/>
-				            			                <sap.ui.core:ListItem text="8" key="8" id="__item8"/>
-				            			                <sap.ui.core:ListItem text="9" key="9" id="__item9"/>
-				            			                <sap.ui.core:ListItem text="10" key="10" id="__item10"/>
-				            			                <sap.ui.core:ListItem text="11" key="11" id="__item11"/>
-				            			                <sap.ui.core:ListItem text="12" key="12" id="__item12"/>
-				            			                <sap.ui.core:ListItem text="13" key="13" id="__item13"/>
-				            			        	</items>
-				            			        </Select>
-				            			        <Select xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns="sap.m" xmlns:sap.ui.core="sap.ui.core" selectedKey="lstmStandard" id="modelTypeBox" width="50%">
-				            			            <items>
-				            			                <sap.ui.core:ListItem text="lstmPrecise" key="lstmPrecise" id="__m0"/>
-				            			                <sap.ui.core:ListItem text="lstmFast" key="lstmFast" id="__m1"/>
-				            			                <sap.ui.core:ListItem text="lstmStandard" key="lstmStandard" id="__m2"/>
-				            			                <sap.ui.core:ListItem text="noLstm" key="noLstm" id="__m3"/>
-				            			                <sap.ui.core:ListItem text="all" key="all" id="__m4"/>
-													</items>
-				            			        </Select>
-				            			        <Button text="Process" width="50%" id="__button2" press="uploadFile"/>
-				            			        <BusyIndicator busy="true" busyIndicatorDelay="0" text="Please wait..." id="busyIndicator" visible="false"/>
-				            			        </sap.ui.layout:VerticalLayout>
-				            			    <!--</sap.ui.layout:content>-->
-				            			<!--</sap.ui.layout:HorizontalLayout>-->
-	                                </sap.ui.layout.form:content>
-	                            </sap.ui.layout.form:SimpleForm>
-	                            </FlexBox>
-	                            <Panel id="__panel0" headerText="OCR Result" expandable="true" expanded="true">
-	                                <content>
-	                                    <Text id="ocrText" visible="false"/>
-	                                </content>
-	                            </Panel>
-	                            
-	                        </content>
-	                    </Page>
-	                    <Page title="Page 2" id="__page10"/></pages>
-	            </NavContainer>
-	        </content>
-	    </Page>
-	</pages>
+		<pages>
+			<Page title="Page" id="__page8" showHeader="false" showFooter="false">
+				<content>
+					<NavContainer id="__container5">
+						<pages>
+							<Page title="OCR Extract" id="__page9">
+								<content>
+									<Panel id="__panel00" headerText="Settings" expandable="true" expanded="true">
+										<content>
+											<FlexBox width="100%" id="__box1" alignItems="Center" alignContent="Center" justifyContent="Center">
+												<sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" editable="true" id="__form0" width="auto" layout="GridLayout">
+													<sap.ui.layout.form:content>
+														<!--<sap.ui.layout:HorizontalLayout xmlns:sap.ui.layout="sap.ui.layout" id="__layout0" allowWrapping="true">-->
+														<!--<sap.ui.layout:content>-->
+														<sap.ui.layout:VerticalLayout xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="__layout0">
+															<sap.ui.unified:FileUploader xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns:sap.ui.unified="sap.ui.unified" id="fileUploader" placeholder="Upload pdf" width="auto" name="filename" uploadStart="onUploadStart"/>
+															<RadioButtonGroup xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns="sap.m" width="auto" columns="2" selectedIndex="-1" id="optionButtons">
+																<buttons>
+																	<RadioButton selected="true" groupName="__group0" text="txt" id="txtButton"/>
+																	<RadioButton groupName="__group0" text="xml" id="xmlButton"/>
+																</buttons>
+															</RadioButtonGroup>
+															<Select xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns="sap.m" xmlns:sap.ui.core="sap.ui.core" selectedKey="1" id="pageSegModeBox">
+																<items>
+																	<sap.ui.core:ListItem text="0" key="0" id="__item0"/>
+																	<sap.ui.core:ListItem text="1" key="1" id="__item1"/>
+																	<sap.ui.core:ListItem text="2" key="2" id="__item2"/>
+																	<sap.ui.core:ListItem text="3" key="3" id="__item3"/>
+																	<sap.ui.core:ListItem text="4" key="4" id="__item4"/>
+																	<sap.ui.core:ListItem text="5" key="5" id="__item5"/>
+																	<sap.ui.core:ListItem text="6" key="6" id="__item6"/>
+																	<sap.ui.core:ListItem text="7" key="7" id="__item7"/>
+																	<sap.ui.core:ListItem text="8" key="8" id="__item8"/>
+																	<sap.ui.core:ListItem text="9" key="9" id="__item9"/>
+																	<sap.ui.core:ListItem text="10" key="10" id="__item10"/>
+																	<sap.ui.core:ListItem text="11" key="11" id="__item11"/>
+																	<sap.ui.core:ListItem text="12" key="12" id="__item12"/>
+																	<sap.ui.core:ListItem text="13" key="13" id="__item13"/>
+																</items>
+															</Select>
+															<Select xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns="sap.m" xmlns:sap.ui.core="sap.ui.core" selectedKey="lstmPrecise" id="modelTypeBox">
+																<items>
+																	<sap.ui.core:ListItem text="lstmPrecise" key="lstmPrecise" id="__m0"/>
+																	<sap.ui.core:ListItem text="lstmFast" key="lstmFast" id="__m1"/>
+																	<sap.ui.core:ListItem text="lstmStandard" key="lstmStandard" id="__m2"/>
+																	<sap.ui.core:ListItem text="noLstm" key="noLstm" id="__m3"/>
+																	<sap.ui.core:ListItem text="all" key="all" id="__m4"/>
+																</items>
+															</Select>
+															<Button text="Process" width="auto" id="__button2" press="uploadFile"/>
+															<BusyIndicator busy="true" busyIndicatorDelay="0" text="Please wait..." id="busyIndicator" visible="false"/>
+														</sap.ui.layout:VerticalLayout>
+														<!--</sap.ui.layout:content>-->
+														<!--</sap.ui.layout:HorizontalLayout>-->
+													</sap.ui.layout.form:content>
+												</sap.ui.layout.form:SimpleForm>
+											</FlexBox>
+										</content>
+									</Panel>
+									<Panel id="__panel0" headerText="OCR Result" expandable="true" expanded="true">
+										<content>
+											<sap.ui.layout:VerticalLayout xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="__layout1">
+												<sap.ui.layout:content>
+													<sap.ui.layout:HorizontalLayout xmlns:sap.ui.layout="sap.ui.layout" id="__layout2">
+														<Button text="Copy" width="auto" id="__button1" press="copyButton"/>
+													<sap.ui.layout:content>
+													    <Button text="Test" width="auto" id="__button3" press="testButton"/>
+													</sap.ui.layout:content>
+													</sap.ui.layout:HorizontalLayout>
+													<Text xmlns="sap.m" id="ocrText"/>
+												</sap.ui.layout:content>
+											</sap.ui.layout:VerticalLayout>
+										</content>
+									</Panel>
+								</content>
+							</Page>
+							<Page title="Page 2" id="__page10"/></pages>
+					</NavContainer>
+				</content>
+			</Page>
+			<Page title="Page" id="__page0">
+				<content>
+					<sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" tableType="ResponsiveTable" header="Smart Table" enableAutoBinding="true" id="__table0"/>
+				</content>
+			</Page>
+		</pages>
 	</App>
-	
 </mvc:View>

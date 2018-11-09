@@ -5,66 +5,116 @@ var request = require('request');
 // var multiparty = require('multiparty');
 var FormData = require('form-data');
 var fs = require('fs');
+var hdbext = require("@sap/hdbext");
 
-router.get('/', (req, res) =>{
+var hanaConfig = {
+	host: 'ec2-54-158-20-168.compute-1.amazonaws.com',
+	port: 30015,
+	user: 'jeff',
+	password: 'Hana12345'
+};
+
+router.get('/', (req, res) => {
 	res.send("ocr, / called." + req.requestTime);
 });
 router.get('/test', (req, res) => {
 	console.log("get successful");
 	res.send("success");
 });
-// router.post('/test', (req,res) => {
-//     var form = new multiparty.Form();
-// 	form.parse(req, (err, fields, files) => {
-// 		// Parse the form sent from front end application
-// 		console.log({'test':'json'});
-// 		// console.log("FILES");
-// 		var fileJson = files['files'][0];
-// 		console.log(fileJson);
-// 		var filename = files['files'][0]['originalFilename'];
-// 		console.log('filename: ' + filename);
-// 		var filePath = files['files'][0]['path'];
-// 		console.log('filePath: ' + filePath);
-// 		// console.log(files['']);
-// 		console.log('fields: ' + fields);
-// 		var ocrOptions = fields['options'][0];
-// 		console.log('ocrOptions: ' + ocrOptions);
-// 		// console.log(form);
+
+router.post('/linedelete', (req, res) => {
+	hdbext.createConnection(hanaConfig, (err, client) => {
+		if(err) {
+			res.send(err);
+			return console.error(err);
+		}
+		client.exec(`DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) =>{
+			if(qerr){
+				res.send(qerr);
+				return qerr;
+			}else{
+				console.log("ERROR WHEN IT WORKS");
+				console.log(qerr);
+				// client.exec('COMMIT',(e,r) =>{});
+				console.log("Truncate successful.");
+				res.send(qres + " Delete successful");
+				// return qres;
+			}
+		} );
+	});
+});
+
+router.post('/line', (req, res) => {
+	var fileName = req.body.fileName;
+	var pageNum = req.body.pageNum;
+	var lineNum = req.body.lineNum;
+	var line = req.body.line;
+	// console.log(req);
+	hdbext.createConnection(hanaConfig, function(err, client) {
+		if (err) {
+			return console.error(err);
+		}
+		client.exec(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(0, 0, 0, 'this is a test')`, (err2, res2) => {
+			if (err2) {
+				console.log("BEGIN ERR");
+				console.log(err2);
+				console.log("END ERR");
+				res.send("ERROR" + err2);
+			} else {
+				console.log(`Result: ${res2}`);
+				res.send("SUCCESS");
+			}
+		});
+		console.log("Ending insert/post");
 		
-// 		// Create new form for ocr request
-// 		var newForm = new FormData();
-// 		var file = fs.readFileSync(filePath, 'utf8');
-// 		console.log('file: ' + file);
-// 		newForm.append('files', file, filename);
-// 		newForm.append('options', ocrOptions);
-// 		// newForm = JSON.stringify(newForm);
-		
-// 		// Create settings for ocr request
-// 		var _url = "https://sandbox.api.sap.com/ml/ocr/ocr/";
-// 		var _apiKey = "QEkc0UduJQtxhBA3oVAdbpzCda0qFPSe";
-// 		var options = {
-// 			url :_url,
-// 			headers:{
-// 				'apiKey':_apiKey,
-// 				'Accept':'application/json'
-// 				// 'Access-Control-Allow-Origin': '*'
-// 			},
-// 			data: newForm
-// 		};
-// 		// have to get the file and title from the form received by multiparty, then fomrat it correctly
-// 		request.post(options, (err, res, body) => {
-// 			// console.log(res);
-// 			console.log(body);
-// 		});
-// 	});
-// });
+	});
+});
+router.get('/line',(req,res) => {
+	hdbext.createConnection(hanaConfig, (err, client) => {
+		if(err){
+			return console.error(err);
+		}
+		client.exec(`SELECT * FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) =>{
+			if(qerr){
+				return console.error(qerr);
+			}else{
+				console.log(qres);
+				res.send(qres);
+				return(qres);
+			}
+		});
+	});
+});
+
+router.post('/linetest', (req, res) => {
+	var fileName = req.fileName;
+	var pageNum = req.pageNum;
+	var lineNum = req.lineNum;
+	var line = req.line;
+
+	hdbext.createConnection(hanaConfig, function(err, client) {
+		console.log("posted");
+		if (err) {
+			return console.error(err);
+		}
+		client.exec("SELECT * FROM DUMMY", (err2, res2) => {
+			if (err2) {
+				return console.error(err2);
+			} else {
+				console.log(`Result: ${res2}`);
+				res.send(res2);
+				return(err2);
+			}
+		});
+	});
+});
+
 router.get('/options', (req, res) => {
 	var options = {
-		url:'https://sandbox.api.sap.com/ml/ocr/ocr/',
-		apiKey:'QEkc0UduJQtxhBA3oVAdbpzCda0qFPSe'
+		url: 'https://sandbox.api.sap.com/ml/ocr/ocr/',
+		apiKey: 'QEkc0UduJQtxhBA3oVAdbpzCda0qFPSe'
 	};
 	res.send(options);
 });
-
 
 module.exports = router;

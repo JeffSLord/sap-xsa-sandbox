@@ -20,6 +20,8 @@ modules:
           name: node-be
           url: '~{url}'
       - name: hdb_cds
+      - name: nodexsjs
+      - name: nodexsjs_api
   - name: hdb_cds
     type: hdb
     path: hdb_cds
