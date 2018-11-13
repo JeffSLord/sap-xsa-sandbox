@@ -1,13 +1,14 @@
 {
 	"welcomeFile": "webapp/index.html",
 	"authenticationMethod": "none",
-	"routes": [
-		{
-		"source":"/node/(.*)",
-		"destination":"node-be",
-		"target":"$1",
-		"authenticationType":"none",
-		"csrfProtection":true
-	}
-	]
+	"routes": [{
+		"source": "/node/(.*)",
+		"destination": "node-be",
+		"target": "$1",
+		"authenticationType": "none",
+		"csrfProtection": true
+	}, {
+		"source": "/xsodata/lines.xsodata/",
+		"destination": "nodexsjs_be"
+	}]
 }

@@ -1,0 +1,5 @@
+{
+  "welcomeFile": "index.html",
+  "authenticationMethod": "none",
+  "routes": [{ "source": "/xsodata/lines.xsodata/", "destination": "nodexsjs_be" }]
+}

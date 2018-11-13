@@ -4,9 +4,26 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 		/**
 		 *@memberOf sandbox.ui5.controller.View1
 		 */
-		 onInit: function(){
-		 	console.log("INITING");
-		 },
+		onInit: function() {
+			console.log("INITING");
+			var oModel = new sap.ui.model.json.JSONModel();
+			oModel.setData({
+				test1: "Demo Application",
+				test2: "application"
+			});
+			this.getView().setModel(oModel, "testModel");
+			// console.log(oModel);
+			var oModel = new sap.ui.model.odata.v2.ODataModel("/xsodata/lines.xsodata/");
+			this.getView().setModel(oModel, "lineModel");
+			console.log(oModel);
+			console.log(oModel['oData']);
+			
+			var oTable = this.getView().byId("sTable");
+			oTable.setModel(oModel);
+		},
+		onAfterRendering: function() {
+			console.log("done rendering.");
+		},
 		action: function(oEvent) {
 			var that = this;
 			var actionParameters = JSON.parse(oEvent.getSource().data("wiring").replace(/'/g, "\""));
@@ -41,19 +58,19 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 		/**
 		 *@memberOf sandbox.ui5.controller.View1
 		 */
-		copyButton: function(){
+		copyButton: function() {
 			var txt = this.getView().byId("ocrText").getText();
 			navigator.clipboard.writeText(txt).then(function() {
-			  console.log('Async: Copying to clipboard was successful!');
-			  sap.m.MessageToast.show("Text copied to clipboard.", {});
+				console.log('Async: Copying to clipboard was successful!');
+				sap.m.MessageToast.show("Text copied to clipboard.", {});
 			}, function(err) {
-			  console.error('Async: Could not copy text: ', err);
+				console.error('Async: Could not copy text: ', err);
 			});
 		},
-		testButton: function(){
+		testButton: function() {
 			$.ajax({
-				url:'/node/ocr/line/',
-				type:'post',
+				url: '/node/ocr/line/',
+				type: 'post',
 				success: (data) => {
 					console.log(data);
 				},
@@ -103,12 +120,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			formData.append("options", optionsStringy);
 			console.log(file);
 			console.log(optionsStringy);
-			
+
 			// Call backend to get ocr options, like apikey and url
 			// then call ocr api with returned data, and data collected from front end.
 			$.ajax({
-				url:'/node/ocr/options/',
-				type:'get',
+				url: '/node/ocr/options/',
+				type: 'get',
 				success: (data) => {
 					busyIndicator.setVisible(true);
 					ocrRequest(data, formData);
@@ -117,37 +134,26 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 					console.log("error:" + err);
 				}
 			});
-			var ocrRequest = (options, form) =>{
+			var ocrRequest = (options, form) => {
 				console.log("Calling ocr api with options...");
 				$.ajax({
-					url:options.url,
+					url: options.url,
 					headers: {
 						'apiKey': options.apiKey,
-						'Accept':'application/json'
+						'Accept': 'application/json'
 					},
-					'Accept':'application/json',
-					type:'post',
-					contentType:false,
-					processData:false,
+					'Accept': 'application/json',
+					type: 'post',
+					contentType: false,
+					processData: false,
 					// formData:form,
-					data:form,
+					data: form,
 					success: (data) => {
 						console.log(data);
 						// console.log(data['predictions'][0]);
 						var textRes = data['predictions'][0];
 						var lines = textRes.split("\n");
-						var cleaned = "";
-						for(var i = 0; i<lines.length; i++){
-							// console.log(lines[i].replace(/\s/g,"").length);
-							if(lines[i].replace(/\s/g,"").length>0){
-								if(cleaned===""){
-									cleaned+=lines[i];
-								}else{
-									cleaned+="\n" + lines[i];
-								}
-								console.log(lines[i]);
-							}
-						}
+						var cleaned = this.cleanLines(lines);
 						ocrText.setText(cleaned);
 						ocrText.setVisible(true);
 						busyIndicator.setVisible(false);
@@ -157,6 +163,20 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 					}
 				});
 			};
+		},
+		cleanLines: function(lines) {
+			var cleaned = "";
+			for (var i = 0; i < lines.length; i++) {
+				// console.log(lines[i].replace(/\s/g,"").length);
+				if (lines[i].replace(/\s/g, "").length > 0) {
+					if (cleaned === "") {
+						cleaned += lines[i];
+					} else {
+						cleaned += "\n" + lines[i];
+					}
+				}
+			}
+			return cleaned;
 		}
 	});
 });

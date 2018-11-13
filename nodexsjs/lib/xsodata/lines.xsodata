@@ -1,0 +1,3 @@
+service{
+	"sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" as "LINES";
+}

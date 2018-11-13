@@ -43,7 +43,6 @@ router.post('/linedelete', (req, res) => {
 		} );
 	});
 });
-
 router.post('/line', (req, res) => {
 	var fileName = req.body.fileName;
 	var pageNum = req.body.pageNum;
@@ -54,20 +53,52 @@ router.post('/line', (req, res) => {
 		if (err) {
 			return console.error(err);
 		}
-		client.exec(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(0, 0, 0, 'this is a test')`, (err2, res2) => {
-			if (err2) {
-				console.log("BEGIN ERR");
-				console.log(err2);
-				console.log("END ERR");
-				res.send("ERROR" + err2);
-			} else {
-				console.log(`Result: ${res2}`);
-				res.send("SUCCESS");
+		client.prepare(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`, (perr, statement) => {
+			if(err){
+				console.log(err);
+				res.send(perr);
+			}else{
+				// console.log("StatementID: ", statement.id);
+				statement.exec([fileName, pageNum, lineNum, line], (eerr, rows) =>{
+					if(eerr){
+						console.log(eerr);
+						res.send(eerr);
+					} else{
+						res.send("SUCCESS");
+						// res.send(rows);
+					}
+				});
 			}
 		});
-		console.log("Ending insert/post");
+		// client.exec(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES("${fileName}", "${pageNum}", "${lineNum}", "${line}")`, (err2, res2) => {
+		// 	if (err2) {
+		// 		console.log("BEGIN ERR");
+		// 		console.log(err2);
+		// 		console.log("END ERR");
+		// 		res.send("ERROR" + err2);
+		// 	} else {
+		// 		console.log(`Result: ${res2}`);
+		// 		res.send("SUCCESS");
+		// 	}
+		// });
+		// console.log("Ending insert/post");
 		
 	});
+});
+router.post('/lineMany', (req,res) => {
+	// hdbext.createConnection(hanaConfig, (err, client) =>{
+	// 	if(err){
+	// 		console.error(err);
+	// 		res.send(err);
+	// 	}else{
+	// 		client.prepare(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`, (perr, statement) => {
+	// 			for(var i=0; i< req.body.lines.length; i++){
+	// 				//
+	// 			}
+	// 		}
+	// 		//loop through all
+	// 	}
+	// });
 });
 router.get('/line',(req,res) => {
 	hdbext.createConnection(hanaConfig, (err, client) => {
@@ -76,6 +107,7 @@ router.get('/line',(req,res) => {
 		}
 		client.exec(`SELECT * FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) =>{
 			if(qerr){
+				res.send(qerr);
 				return console.error(qerr);
 			}else{
 				console.log(qres);

@@ -1,7 +1,7 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sandbox.ui5.controller.View1" displayBlock="true">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:action="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="sandbox.ui5.controller.View1" displayBlock="true">
 	<App id="idAppControl">
 		<pages>
-			<Page title="Page" id="__page8" showHeader="false" showFooter="false">
+			<Page title="{testModel>/test1}" id="__page8" showFooter="false" showNavButton="true" navButtonType="Emphasized" navButtonPress="action" action:wiring="\{'navButtonPress':\{'navigation':\{'routeName':'View1'\}\}\}">
 				<content>
 					<NavContainer id="__container5">
 						<pages>
@@ -72,17 +72,17 @@
 													<Text xmlns="sap.m" id="ocrText"/>
 												</sap.ui.layout:content>
 											</sap.ui.layout:VerticalLayout>
+											<sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" tableType="ResponsiveTable" header="Smart Table" enableAutoBinding="true" id="sTable" entitySet="LINES" initiallyVisibleFields="FILENAME,LINENUMBER,PAGENUMBER,TEXT"/>
 										</content>
 									</Panel>
 								</content>
 							</Page>
-							<Page title="Page 2" id="__page10"/></pages>
+							<Page title="Page 2" id="__page10">
+							    <content>
+							        <sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" tableType="ResponsiveTable" header="Smart Table" enableAutoBinding="true" id="__table0" tableBindingPath="{lineModel}"/>
+							    </content>
+							</Page></pages>
 					</NavContainer>
-				</content>
-			</Page>
-			<Page title="Page" id="__page0">
-				<content>
-					<sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" tableType="ResponsiveTable" header="Smart Table" enableAutoBinding="true" id="__table0"/>
 				</content>
 			</Page>
 		</pages>
