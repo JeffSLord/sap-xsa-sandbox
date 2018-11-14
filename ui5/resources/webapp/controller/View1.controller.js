@@ -158,7 +158,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 				// formData:form,
 				data: formData,
 				success: (data) => {
-					console.log("OCR Successful.");
+					console.log("[INFO] OCR Successful.");
 					// console.log(data);
 					// console.log(data['predictions'][0]);
 					var textRes = data['predictions'][0];
@@ -169,13 +169,31 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 					for (var i = 0; i < cleanedArr.length; i++) {
 						cleanString += cleanedArr[i] + '\n';
 					}
-					console.log("Deleting table...");
+					console.log("[INFO] Deleting table...");
 					$.ajax({
 						url: '/node/ocr/linedelete',
 						timeout: 360000,
 						type: 'post',
 						success: () => {
 							this.getView().getModel('lineModel').refresh();
+							console.log("[INFO] Line model refreshed.");
+							console.log("[INFO] Inserting page to table...");
+							var newData = {
+								fileName: this.getView().getModel('currentFileModel').getProperty('/fileName'),
+								text: cleanString
+							};
+							$.ajax({
+								url: '/node/ocr/page/',
+								type: 'post',
+								data: newData,
+								success: (data) => {
+									console.log("[INFO] Successfully inserted page.");
+								},
+								error: (err) => {
+									console.log("[ERROR] Inserting page: " + err);
+								}
+							});
+							console.log("[INFO] Inserting lines to table...");
 							for (var i = 0; i < cleanedArr.length; i++) {
 								var newData = {
 									fileName: this.getView().getModel('currentFileModel').getProperty('/fileName'),
@@ -192,30 +210,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 										// console.log(data);
 										this.getView().getModel('lineModel').refresh();
 									},
-									error: (err) => {}
+									error: (err) => {
+										console.log("[ERROR] Inserting line:" + err);
+									}
 								});
 							}
 						},
-						error: () => {}
-							// var newData = {
-							// 	fileName: this.getView().getModel('currentFileModel').getProperty('/fileName'),
-							// 	pageNum: '1',
-							// 	lines: cleanedArr
-							// };
-							// newData = JSON.stringify(newData);
-							// console.log(newData);
-							// console.log("Inserting new data...");
-							// $.ajax({
-							// 	url: '/node/ocr/lineMany/',
-							// 	timeout: 3600,
-							// 	type: 'post',
-							// 	data: newData,
-							// 	success: (data) => {
-							// 		// console.log(data);
-							// 		this.getView().getModel('lineModel').refresh();
-							// 	},
-							// 	error: (err) => {}
-							// });
+						error: (err) => {
+							console.log("[ERROR] Deleting table:" + err);
+						}
 					});
 					ocrText.setText(cleanString);
 					ocrText.setVisible(true);
@@ -224,24 +227,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 					tablePanel.setBusy(false);
 				},
 				error: (err) => {
-					console.log(err);
+					console.log("[ERROR] Calling OCR API: " + err);
 				}
-
 			});
-
 		},
 
 		cleanLines: function(lines) {
 			var cleaned = "";
 			var cleaned = [];
 			for (var i = 0; i < lines.length; i++) {
-				// console.log(lines[i].replace(/\s/g,"").length);
 				if (lines[i].replace(/\s/g, "").length > 0) {
-					// if (cleaned === "") {
-					// 	cleaned += lines[i];
-					// } else {
-					// 	cleaned += "\n" + lines[i];
-					// }
 					cleaned.push(lines[i]);
 				}
 			}

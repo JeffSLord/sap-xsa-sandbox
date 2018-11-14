@@ -9,7 +9,8 @@
 		"csrfProtection": true
 	}, {
 		"source": "/xsodata/lines.xsodata/",
-		"destination": "nodexsjs_be"
+		"destination": "nodexsjs_be",
+		"authenticationType":"none"
 	}
 	]
 }

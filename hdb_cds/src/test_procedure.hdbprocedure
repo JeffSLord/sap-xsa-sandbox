@@ -1,0 +1,16 @@
+PROCEDURE "sap_xsa_sandbox.hdb_cds::test_procedure"()
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   READS SQL DATA AS
+BEGIN
+   /*************************************
+       Write your procedure logic 
+   *************************************/
+	DECLARE v_count integer;
+	-- v_tab = select * from "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES";
+	select count(*) into v_count from "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES";
+	IF v_count=0 THEN 
+		DELETE FROM "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES";
+	END IF;
+END

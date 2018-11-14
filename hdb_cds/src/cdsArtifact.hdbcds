@@ -54,4 +54,10 @@ context CongressMarks {
         key LINENUMBER : Integer     default 0;
             TEXT       : String(1024);
     };
+
+    /*@@layout{"layoutInfo":{"x":-771,"y":-93.5}}*/
+    entity PAGES {
+        key FILENAME : String(128) not null;
+            TEXT     : String(5000);
+    };
 };

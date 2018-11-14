@@ -35,7 +35,6 @@ modules:
     path: hdb_ta
     requires:
       - name: hdi_hdb_ta
-      - name: hdi_hdb_cds
   - name: nodexsjs
     type: nodejs
     path: nodexsjs
