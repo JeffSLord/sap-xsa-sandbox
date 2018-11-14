@@ -12,12 +12,17 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 				test2: "application"
 			});
 			this.getView().setModel(oModel, "testModel");
+			var oModel = new sap.ui.model.json.JSONModel();
+			oModel.setData({
+				fileName: ""
+			});
+			this.getView().setModel(oModel, "currentFileModel");
 			// console.log(oModel);
 			var oModel = new sap.ui.model.odata.v2.ODataModel("/xsodata/lines.xsodata/");
 			this.getView().setModel(oModel, "lineModel");
-			console.log(oModel);
-			console.log(oModel['oData']);
-			
+			// console.log(oModel);
+			// console.log(oModel['oData']);
+
 			var oTable = this.getView().byId("sTable");
 			oTable.setModel(oModel);
 		},
@@ -84,6 +89,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			// Collect input data
 			var fileUploader = this.getView().byId("fileUploader");
 			var busyIndicator = this.getView().byId("busyIndicator");
+			var textPanel = this.getView().byId("textPanel");
+			var tablePanel = this.getView().byId("tablePanel");
+			var settingsPanel = this.getView().byId("settingsPanel");
 			var txtButton = this.getView().byId("txtButton");
 			var xmlButton = this.getView().byId("xmlButton");
 			var pageSegModeBox = this.getView().byId("pageSegModeBox");
@@ -114,6 +122,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			var domRef = fileUploader.getFocusDomRef();
 			var file = domRef.files[0];
 			var fileName = file.name;
+			// Add to the currentFileModel
+			var oModel = this.getView().getModel("currentFileModel");
+			console.log(oModel);
+			oModel.setProperty('/fileName', fileName);
+			oModel.refresh();
+			console.log(oModel);
 			// Create FormData and append required data
 			var formData = new FormData();
 			formData.append("files", file, fileName);
@@ -121,59 +135,114 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			console.log(file);
 			console.log(optionsStringy);
 
-			// Call backend to get ocr options, like apikey and url
-			// then call ocr api with returned data, and data collected from front end.
+			ocrText.setText("");
+			settingsPanel.setExpanded(false);
+			busyIndicator.setVisible(true);
+			textPanel.setExpanded(true);
+			textPanel.setBusy(true);
+			tablePanel.setBusy(true);
+			// ocrRequest(data, formData);
+			console.log("Calling ocr api with options...");
 			$.ajax({
-				url: '/node/ocr/options/',
-				type: 'get',
+				// url: options.url,
+				url: 'https://sandbox.api.sap.com/ml/ocr/ocr/',
+				timeout: 360000,
+				headers: {
+					'apiKey': 'QEkc0UduJQtxhBA3oVAdbpzCda0qFPSe',
+					'Accept': 'application/json'
+				},
+				'Accept': 'application/json',
+				type: 'post',
+				contentType: false,
+				processData: false,
+				// formData:form,
+				data: formData,
 				success: (data) => {
-					busyIndicator.setVisible(true);
-					ocrRequest(data, formData);
+					console.log("OCR Successful.");
+					// console.log(data);
+					// console.log(data['predictions'][0]);
+					var textRes = data['predictions'][0];
+					var lines = textRes.split("\n");
+					var cleanedArr = this.cleanLines(lines);
+					console.log(cleanedArr);
+					var cleanString = "";
+					for (var i = 0; i < cleanedArr.length; i++) {
+						cleanString += cleanedArr[i] + '\n';
+					}
+					console.log("Deleting table...");
+					$.ajax({
+						url: '/node/ocr/linedelete',
+						timeout: 360000,
+						type: 'post',
+						success: () => {
+							this.getView().getModel('lineModel').refresh();
+							for (var i = 0; i < cleanedArr.length; i++) {
+								var newData = {
+									fileName: this.getView().getModel('currentFileModel').getProperty('/fileName'),
+									pageNum: '1',
+									lineNum: i,
+									line: cleanedArr[i]
+								};
+								$.ajax({
+									url: '/node/ocr/line/',
+									timeout: 3600,
+									type: 'post',
+									data: newData,
+									success: (data) => {
+										// console.log(data);
+										this.getView().getModel('lineModel').refresh();
+									},
+									error: (err) => {}
+								});
+							}
+						},
+						error: () => {}
+							// var newData = {
+							// 	fileName: this.getView().getModel('currentFileModel').getProperty('/fileName'),
+							// 	pageNum: '1',
+							// 	lines: cleanedArr
+							// };
+							// newData = JSON.stringify(newData);
+							// console.log(newData);
+							// console.log("Inserting new data...");
+							// $.ajax({
+							// 	url: '/node/ocr/lineMany/',
+							// 	timeout: 3600,
+							// 	type: 'post',
+							// 	data: newData,
+							// 	success: (data) => {
+							// 		// console.log(data);
+							// 		this.getView().getModel('lineModel').refresh();
+							// 	},
+							// 	error: (err) => {}
+							// });
+					});
+					ocrText.setText(cleanString);
+					ocrText.setVisible(true);
+					busyIndicator.setVisible(false);
+					textPanel.setBusy(false);
+					tablePanel.setBusy(false);
 				},
 				error: (err) => {
-					console.log("error:" + err);
+					console.log(err);
 				}
+
 			});
-			var ocrRequest = (options, form) => {
-				console.log("Calling ocr api with options...");
-				$.ajax({
-					url: options.url,
-					headers: {
-						'apiKey': options.apiKey,
-						'Accept': 'application/json'
-					},
-					'Accept': 'application/json',
-					type: 'post',
-					contentType: false,
-					processData: false,
-					// formData:form,
-					data: form,
-					success: (data) => {
-						console.log(data);
-						// console.log(data['predictions'][0]);
-						var textRes = data['predictions'][0];
-						var lines = textRes.split("\n");
-						var cleaned = this.cleanLines(lines);
-						ocrText.setText(cleaned);
-						ocrText.setVisible(true);
-						busyIndicator.setVisible(false);
-					},
-					error: (err) => {
-						console.log(err);
-					}
-				});
-			};
+
 		},
+
 		cleanLines: function(lines) {
 			var cleaned = "";
+			var cleaned = [];
 			for (var i = 0; i < lines.length; i++) {
 				// console.log(lines[i].replace(/\s/g,"").length);
 				if (lines[i].replace(/\s/g, "").length > 0) {
-					if (cleaned === "") {
-						cleaned += lines[i];
-					} else {
-						cleaned += "\n" + lines[i];
-					}
+					// if (cleaned === "") {
+					// 	cleaned += lines[i];
+					// } else {
+					// 	cleaned += "\n" + lines[i];
+					// }
+					cleaned.push(lines[i]);
 				}
 			}
 			return cleaned;

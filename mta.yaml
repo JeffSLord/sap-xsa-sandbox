@@ -35,6 +35,7 @@ modules:
     path: hdb_ta
     requires:
       - name: hdi_hdb_ta
+      - name: hdi_hdb_cds
   - name: nodexsjs
     type: nodejs
     path: nodexsjs
@@ -62,3 +63,9 @@ resources:
     properties:
       hdi-container-name_5: '${service-name}'
     type: com.sap.xs.hdi-container
+  - name: SANDBOX_OCR
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: SANDBOX_OCR
+    properties:
+      SANDBOX_OCR_SERVICE: '${service-name}'

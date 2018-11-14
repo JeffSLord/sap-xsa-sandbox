@@ -1,20 +1,18 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:action="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="sandbox.ui5.controller.View1" displayBlock="true">
 	<App id="idAppControl">
 		<pages>
-			<Page title="{testModel>/test1}" id="__page8" showFooter="false" showNavButton="true" navButtonType="Emphasized" navButtonPress="action" action:wiring="\{'navButtonPress':\{'navigation':\{'routeName':'View1'\}\}\}">
+			<Page title="{testModel>/test1}" id="__page8" showFooter="false" navButtonType="Emphasized" navButtonPress="action" action:wiring="\{'navButtonPress':\{'navigation':\{'routeName':'View1'\}\}\}">
 				<content>
 					<NavContainer id="__container5">
 						<pages>
-							<Page title="OCR Extract" id="__page9">
+							<Page title="OCR Extract" id="__page9" showHeader="false">
 								<content>
-									<Panel id="__panel00" headerText="Settings" expandable="true" expanded="true">
+									<Panel id="settingsPanel" headerText="Settings" expandable="true" expanded="true">
 										<content>
 											<FlexBox width="100%" id="__box1" alignItems="Center" alignContent="Center" justifyContent="Center">
-												<sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" editable="true" id="__form0" width="auto" layout="GridLayout">
+												<sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" editable="true" id="__form0" width="auto">
 													<sap.ui.layout.form:content>
-														<!--<sap.ui.layout:HorizontalLayout xmlns:sap.ui.layout="sap.ui.layout" id="__layout0" allowWrapping="true">-->
-														<!--<sap.ui.layout:content>-->
-														<sap.ui.layout:VerticalLayout xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="__layout0">
+														<VBox width="100%" direction="Column" id="__vbox0" justifyContent="Center" alignItems="Center">
 															<sap.ui.unified:FileUploader xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns:sap.ui.unified="sap.ui.unified" id="fileUploader" placeholder="Upload pdf" width="auto" name="filename" uploadStart="onUploadStart"/>
 															<RadioButtonGroup xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns="sap.m" width="auto" columns="2" selectedIndex="-1" id="optionButtons">
 																<buttons>
@@ -51,7 +49,7 @@
 															</Select>
 															<Button text="Process" width="auto" id="__button2" press="uploadFile"/>
 															<BusyIndicator busy="true" busyIndicatorDelay="0" text="Please wait..." id="busyIndicator" visible="false"/>
-														</sap.ui.layout:VerticalLayout>
+														</VBox>
 														<!--</sap.ui.layout:content>-->
 														<!--</sap.ui.layout:HorizontalLayout>-->
 													</sap.ui.layout.form:content>
@@ -59,21 +57,22 @@
 											</FlexBox>
 										</content>
 									</Panel>
-									<Panel id="__panel0" headerText="OCR Result" expandable="true" expanded="true">
+									<Panel id="textPanel" headerText="OCR Result" expandable="true">
 										<content>
 											<sap.ui.layout:VerticalLayout xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="__layout1">
 												<sap.ui.layout:content>
 													<sap.ui.layout:HorizontalLayout xmlns:sap.ui.layout="sap.ui.layout" id="__layout2">
 														<Button text="Copy" width="auto" id="__button1" press="copyButton"/>
-													<sap.ui.layout:content>
-													    <Button text="Test" width="auto" id="__button3" press="testButton"/>
-													</sap.ui.layout:content>
 													</sap.ui.layout:HorizontalLayout>
 													<Text xmlns="sap.m" id="ocrText"/>
 												</sap.ui.layout:content>
 											</sap.ui.layout:VerticalLayout>
-											<sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" tableType="ResponsiveTable" header="Smart Table" enableAutoBinding="true" id="sTable" entitySet="LINES" initiallyVisibleFields="FILENAME,LINENUMBER,PAGENUMBER,TEXT"/>
 										</content>
+									</Panel>
+									<Panel id="tablePanel" headerText="Table" expandable="true" expanded="true">
+									    <content>
+									        <sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" header="OCR Table" enableAutoBinding="true" id="sTable" entitySet="LINES" initiallyVisibleFields="FILENAME,LINENUMBER,PAGENUMBER,TEXT" tableType="ResponsiveTable"/>
+									    </content>
 									</Panel>
 								</content>
 							</Page>

@@ -17,30 +17,34 @@ var hanaConfig = {
 router.get('/', (req, res) => {
 	res.send("ocr, / called." + req.requestTime);
 });
-router.get('/test', (req, res) => {
-	console.log("get successful");
-	res.send("success");
+router.get('/options', (req, res) => {
+	var options = {
+		url: 'https://sandbox.api.sap.com/ml/ocr/ocr/',
+		apiKey: 'QEkc0UduJQtxhBA3oVAdbpzCda0qFPSe'
+	};
+	res.send(options);
 });
+// router.get('/test', (req, res) => {
+// 	console.log("get successful");
+// 	res.send("success");
+// });
 
 router.post('/linedelete', (req, res) => {
 	hdbext.createConnection(hanaConfig, (err, client) => {
-		if(err) {
+		if (err) {
 			res.send(err);
 			return console.error(err);
 		}
-		client.exec(`DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) =>{
-			if(qerr){
+		client.exec(`DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) => {
+			if (qerr) {
 				res.send(qerr);
 				return qerr;
-			}else{
-				console.log("ERROR WHEN IT WORKS");
-				console.log(qerr);
-				// client.exec('COMMIT',(e,r) =>{});
-				console.log("Truncate successful.");
+			} else {
+				console.log("[INFO] Delete Successful.");
 				res.send(qres + " Delete successful");
 				// return qres;
 			}
-		} );
+		});
 	});
 });
 router.post('/line', (req, res) => {
@@ -53,100 +57,121 @@ router.post('/line', (req, res) => {
 		if (err) {
 			return console.error(err);
 		}
-		client.prepare(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`, (perr, statement) => {
-			if(err){
+		client.prepare(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`, (perr,
+			statement) => {
+			if (err) {
 				console.log(err);
 				res.send(perr);
-			}else{
+			} else {
 				// console.log("StatementID: ", statement.id);
-				statement.exec([fileName, pageNum, lineNum, line], (eerr, rows) =>{
-					if(eerr){
+				statement.exec([fileName, pageNum, lineNum, line], (eerr, rows) => {
+					if (eerr) {
 						console.log(eerr);
 						res.send(eerr);
-					} else{
-						res.send("SUCCESS");
+					} else {
+						console.log("Single Insert Successful.");
+						res.send("[INFO] SUCCESS");
 						// res.send(rows);
 					}
 				});
 			}
 		});
-		// client.exec(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES("${fileName}", "${pageNum}", "${lineNum}", "${line}")`, (err2, res2) => {
-		// 	if (err2) {
-		// 		console.log("BEGIN ERR");
-		// 		console.log(err2);
-		// 		console.log("END ERR");
-		// 		res.send("ERROR" + err2);
-		// 	} else {
-		// 		console.log(`Result: ${res2}`);
-		// 		res.send("SUCCESS");
-		// 	}
-		// });
-		// console.log("Ending insert/post");
-		
 	});
 });
-router.post('/lineMany', (req,res) => {
-	// hdbext.createConnection(hanaConfig, (err, client) =>{
-	// 	if(err){
-	// 		console.error(err);
-	// 		res.send(err);
+router.post('/lineMany', (req, res) => {
+	var results = {};
+	var query = `INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`;
+	// client.prepare(query, (perr, statement) => {
+	// 	if(perr){
+	// 		res.send(perr);
 	// 	}else{
-	// 		client.prepare(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`, (perr, statement) => {
-	// 			for(var i=0; i< req.body.lines.length; i++){
-	// 				//
+	// 		hdbext.createConnection(hanaConfig, (cerr, client) => {
+	// 			if(cerr){
+	// 				res.send(cerr);
+	// 			}else{
+					
 	// 			}
-	// 		}
-	// 		//loop through all
+	// 		})
 	// 	}
-	// });
-});
-router.get('/line',(req,res) => {
+	// })
+	// client.prepare(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`, (perr,
+
+	
+	
+	
 	hdbext.createConnection(hanaConfig, (err, client) => {
-		if(err){
-			return console.error(err);
+		if (err) {
+			console.error(err);
+			res.send(err);
+		} else {
+			client.prepare(query, (perr, statement) => {
+				if (perr) {
+					res.send(perr);
+				} else {
+					var data = req.body;
+					var fileName = data.fileName;
+					var pageNum = data.pageNum;
+					var lines = data.lines;
+					for (var i = 0; i < lines.length; i++) {
+						var lineNum = i;
+						var line = lines[i];
+						statement.exec([fileName, pageNum, lineNum, line], (eerr, rows) => {
+							if (eerr) {
+								console.log("[INFO] Name: " + fileName + ", Num: " + pageNum + ", Line: " + lineNum + ", Text: " + line);
+								console.error("[ERROR] " + eerr.toString());
+								results[i] = ["Error: " + eerr];
+							} else {
+								console.log("[INFO] Success");
+								results[i] = ["SUCCESS"];
+							}
+						});
+					}
+				}
+			});
 		}
-		client.exec(`SELECT * FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) =>{
-			if(qerr){
-				res.send(qerr);
-				return console.error(qerr);
-			}else{
-				console.log(qres);
-				res.send(qres);
-				return(qres);
-			}
-		});
 	});
+	res.send(JSON.stringify(results));
 });
-
-router.post('/linetest', (req, res) => {
-	var fileName = req.fileName;
-	var pageNum = req.pageNum;
-	var lineNum = req.lineNum;
-	var line = req.line;
-
-	hdbext.createConnection(hanaConfig, function(err, client) {
-		console.log("posted");
+router.get('/line', (req, res) => {
+	hdbext.createConnection(hanaConfig, (err, client) => {
 		if (err) {
 			return console.error(err);
 		}
-		client.exec("SELECT * FROM DUMMY", (err2, res2) => {
-			if (err2) {
-				return console.error(err2);
+		client.exec(`SELECT * FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) => {
+			if (qerr) {
+				res.send(qerr);
+				return console.error(qerr);
 			} else {
-				console.log(`Result: ${res2}`);
-				res.send(res2);
-				return(err2);
+				console.log("[INFO] Select Successful.");
+				// console.log(qres);
+				res.send(qres);
+				return (qres);
 			}
 		});
 	});
 });
 
-router.get('/options', (req, res) => {
-	var options = {
-		url: 'https://sandbox.api.sap.com/ml/ocr/ocr/',
-		apiKey: 'QEkc0UduJQtxhBA3oVAdbpzCda0qFPSe'
-	};
-	res.send(options);
-});
+// router.post('/linetest', (req, res) => {
+// 	var fileName = req.fileName;
+// 	var pageNum = req.pageNum;
+// 	var lineNum = req.lineNum;
+// 	var line = req.line;
+
+// 	hdbext.createConnection(hanaConfig, function(err, client) {
+// 		console.log("[INFO] posted");
+// 		if (err) {
+// 			return console.error(err);
+// 		}
+// 		client.exec("SELECT * FROM DUMMY", (err2, res2) => {
+// 			if (err2) {
+// 				return console.error(err2);
+// 			} else {
+// 				console.log(`Result: ${res2}`);
+// 				res.send(res2);
+// 				return (err2);
+// 			}
+// 		});
+// 	});
+// });
 
 module.exports = router;

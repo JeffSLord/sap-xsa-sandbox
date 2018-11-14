@@ -10,5 +10,6 @@
 	}, {
 		"source": "/xsodata/lines.xsodata/",
 		"destination": "nodexsjs_be"
-	}]
+	}
+	]
 }

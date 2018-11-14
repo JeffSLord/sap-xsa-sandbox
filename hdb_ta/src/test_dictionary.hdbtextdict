@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dictionary xmlns="http://www.sap.com/ta/4.0">
+	
 	<entity_category name="COMPETITOR">
 		<entity_name standard_form="Lockheed Martin Corporation">
 			<variant name="Lockheed Martin"></variant>
@@ -55,24 +56,4 @@
 		</entity_name>
 	</entity_category>
 	
-	
-	
-	
-	
-	<entity_category name="COLUMN">
-		<entity_name standard_form="Appropriation"/>
-		<entity_name standard_form="Base"/>
-		<entity_name standard_form="OCO"/>
-		<entity_name standard_form="Total"/>
-	</entity_category>
-	<entity_category name="APPROPRIATION">
-		<entity_name standard_form="Research, Development, Test &amp; Eval, ?"/>
-		<entity_name standard_form="Operational Test &amp; Eval, Defense"/>
-		<entity_name standard_form="Total Research, Development, Test &amp; Evaluation"/>
-		<entity_name standard_form="Office of the Inspector General"/>
-		<entity_name standard_form="Defense Health Program"/>
-		<entity_name standard_form="Chem Agents &amp; Munitions Destruction"/>
-		<entity_name standard_form="National Defense Sealift Fund"/>
-		<entity_name standard_form="Total Not in Research, Development, Test &amp; Evaluation"/>
-	</entity_category>
 </dictionary>
