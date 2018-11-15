@@ -32,7 +32,7 @@ router.post('/linedelete', (req, res) => {
 			console.error("[ERROR] ", err);
 			res.status(500).send("[ERROR] ", err);
 		}
-		client.exec(`DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) => {
+		client.exec('DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"', (qerr, qres) => {
 			client.end();
 			if (qerr) {
 				console.error("[ERROR] ", qerr);
@@ -44,6 +44,9 @@ router.post('/linedelete', (req, res) => {
 			}
 		});
 	});
+});
+router.get('/linedelete', (req, res) => {
+	res.send('[INFO] Deletes line table.');	
 });
 router.post('/line', (req, res) => {
 	console.log("[INFO] Posting to /line");
@@ -91,22 +94,31 @@ router.post('/page', (req, res) => {
 			console.error("[ERROR] ", err);
 			res.status(500).send("[ERROR] ", err);
 		}
-		client.prepare('INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES" VALUES(?,?)', (perr, statement) => {
-			if (perr) {
-				console.error("[ERROR] Prepare: ", perr);
-				res.status(500).send("[ERROR] : ", perr);
+		client.exec(`DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES" WHERE FILENAME=${fileName}`, (derr, dstatement) => {
+			if (derr) {
+				console.error("[ERROR] Deleting Pages: ", derr);
 			} else {
-				statement.exec([fileName, text], (eerr, rows) => {
-					client.end();
-					if (eerr) {
-						// console.error("[ERROR] Execute: ", eerr);
-						// res.status(500).send("[ERROR]: ", eerr);
+				console.log("[SUCCESS] Deleting Pages.");
+				client.prepare('INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES" VALUES(?,?)', (perr,
+					statement) => {
+					if (perr) {
+						console.error("[ERROR] Prepare: ", perr);
+						res.status(500).send("[ERROR] : ", perr);
 					} else {
-						console.log("[SUCCESS] Page insert successful.");
-						res.send("[SUCCESS] Page Insert Success.");
+						statement.exec([fileName, text], (eerr, rows) => {
+							client.end();
+							if (eerr) {
+								// console.error("[ERROR] Execute: ", eerr);
+								// res.status(500).send("[ERROR]: ", eerr);
+							} else {
+								console.log("[SUCCESS] Page insert successful.");
+								res.send("[SUCCESS] Page Insert Success.");
+							}
+						});
 					}
 				});
 			}
+
 		});
 
 	});
@@ -114,21 +126,6 @@ router.post('/page', (req, res) => {
 router.post('/lineMany', (req, res) => {
 	console.log("[INFO] Posting to lineMany");
 	var results = {};
-	// var query = 'INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)';
-	// client.prepare(query, (perr, statement) => {
-	// 	if(perr){
-	// 		res.send(perr);
-	// 	}else{
-	// 		hdbext.createConnection(hanaConfig, (cerr, client) => {
-	// 			if(cerr){
-	// 				res.send(cerr);
-	// 			}else{
-
-	// 			}
-	// 		})
-	// 	}
-	// })
-	// client.prepare(`INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)`, (perr,
 	hdbext.createConnection(hanaConfig, (err, client) => {
 		if (err) {
 			console.error(err);
@@ -182,6 +179,5 @@ router.get('/line', (req, res) => {
 		});
 	});
 });
-
 
 module.exports = router;

@@ -159,8 +159,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 				data: formData,
 				success: (data) => {
 					console.log("[INFO] OCR Successful.");
-					// console.log(data);
-					// console.log(data['predictions'][0]);
 					var textRes = data['predictions'][0];
 					var lines = textRes.split("\n");
 					var cleanedArr = this.cleanLines(lines);
@@ -169,9 +167,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 					for (var i = 0; i < cleanedArr.length; i++) {
 						cleanString += cleanedArr[i] + '\n';
 					}
-					console.log("[INFO] Deleting table...");
+					console.log("[INFO] Deleting line table...");
 					$.ajax({
-						url: '/node/ocr/linedelete',
+						url: '/node/ocr/linedelete/',
 						timeout: 360000,
 						type: 'post',
 						success: () => {
@@ -190,7 +188,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 									console.log("[INFO] Successfully inserted page.");
 								},
 								error: (err) => {
-									console.log("[ERROR] Inserting page: " + err);
+									console.log("[ERROR] Inserting page: ", err);
 								}
 							});
 							console.log("[INFO] Inserting lines to table...");
@@ -211,13 +209,13 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 										this.getView().getModel('lineModel').refresh();
 									},
 									error: (err) => {
-										console.log("[ERROR] Inserting line:" + err);
+										console.log("[ERROR] Inserting line:", err);
 									}
 								});
 							}
 						},
 						error: (err) => {
-							console.log("[ERROR] Deleting table:" + err);
+							console.log("[ERROR] Deleting table:", err);
 						}
 					});
 					ocrText.setText(cleanString);
@@ -227,7 +225,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 					tablePanel.setBusy(false);
 				},
 				error: (err) => {
-					console.log("[ERROR] Calling OCR API: " + err);
+					console.log("[ERROR] Calling OCR API: ", err);
 				}
 			});
 		},

@@ -1,5 +1,0 @@
-#group CONTRACT: <.+\-.+\-.+\-.+>
-
-
-#group NUMBER: (<POS:Num>) | (<POS:Num>(<\,><POS:Num>)+)
-#group TEST: [TE APPROPRIATION] <>+ [/TE]
