@@ -1,10 +1,9 @@
 var express = require("express");
 var router = express.Router();
-var bodyParser = require('body-parser');
-var request = require('request');
-// var multiparty = require('multiparty');
-var FormData = require('form-data');
-var fs = require('fs');
+// var bodyParser = require('body-parser');
+// var request = require('request');
+// var FormData = require('form-data');
+// var fs = require('fs');
 var hdbext = require("@sap/hdbext");
 
 var hanaConfig = {
@@ -24,23 +23,21 @@ router.get('/options', (req, res) => {
 	};
 	res.send(options);
 });
-
-router.post('/linedelete', (req, res) => {
-	console.log("[INFO] Posting to /linedelete");
+router.get('/line', (req, res) => {
+	console.log("[INFO] Getting /line");
 	hdbext.createConnection(hanaConfig, (err, client) => {
 		if (err) {
-			console.error("[ERROR] ", err);
+			console.error(err);
 			res.status(500).send("[ERROR] ", err);
 		}
-		client.exec('DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"', (qerr, qres) => {
+		client.exec(`SELECT * FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) => {
 			client.end();
 			if (qerr) {
-				console.error("[ERROR] ", qerr);
+				console.error(qerr);
 				res.status(500).send("[ERROR] ", qerr);
 			} else {
-				console.log("[SUCCESS] Delete Successful.");
-				res.send("[SUCCESS] Delete successful");
-				// return qres;
+				console.log("[SUCCESS] Select Successful.");
+				res.send(qres);
 			}
 		});
 	});
@@ -80,6 +77,26 @@ router.post('/line', (req, res) => {
 						// res.send(rows);
 					}
 				});
+			}
+		});
+	});
+});
+router.post('/linedelete', (req, res) => {
+	console.log("[INFO] Posting to /linedelete");
+	hdbext.createConnection(hanaConfig, (err, client) => {
+		if (err) {
+			console.error("[ERROR] ", err);
+			res.status(500).send("[ERROR] ", err);
+		}
+		client.exec('DELETE FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"', (qerr, qres) => {
+			client.end();
+			if (qerr) {
+				console.error("[ERROR] ", qerr);
+				res.status(500).send("[ERROR] ", qerr);
+			} else {
+				console.log("[SUCCESS] Delete Successful.");
+				res.send("[SUCCESS] Delete successful");
+				// return qres;
 			}
 		});
 	});
@@ -159,25 +176,6 @@ router.post('/lineMany', (req, res) => {
 		}
 	});
 	res.send(JSON.stringify(results));
-});
-router.get('/line', (req, res) => {
-	console.log("[INFO] Getting /line");
-	hdbext.createConnection(hanaConfig, (err, client) => {
-		if (err) {
-			console.error(err);
-			res.status(500).send("[ERROR] ", err);
-		}
-		client.exec(`SELECT * FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (qerr, qres) => {
-			client.end();
-			if (qerr) {
-				console.error(qerr);
-				res.status(500).send("[ERROR] ", qerr);
-			} else {
-				console.log("[SUCCESS] Select Successful.");
-				res.send(qres);
-			}
-		});
-	});
 });
 
 module.exports = router;

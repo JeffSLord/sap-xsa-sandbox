@@ -16,9 +16,11 @@ context Docs {
         key PAGE_NUMBER    : Integer    not null;
             PAGE_CONTENT   : LargeBinary;
     };
+    
 };
 
 @OData.publish : true
+
 /*@@layout{"layoutInfo":{"x":-510,"y":-35}}*/
 context Text {
 
@@ -47,7 +49,7 @@ context DocText {
 /*@@layout{"layoutInfo":{"x":-559,"y":-36.5}}*/
 context CongressMarks {
 
-    /*@@layout{"layoutInfo":{"x":-436,"y":-104.5}}*/
+    /*@@layout{"layoutInfo":{}}*/
     entity LINES {
         key FILENAME   : String(128) default '0';
         key PAGENUMBER : Integer     default 0;
@@ -55,9 +57,17 @@ context CongressMarks {
             TEXT       : String(1024);
     };
 
-    /*@@layout{"layoutInfo":{"x":-771,"y":-93.5}}*/
+    /*@@layout{"layoutInfo":{}}*/
     entity PAGES {
         key FILENAME : String(128) not null;
             TEXT     : String(5000);
+    };
+
+    /*@@layout{"layoutInfo":{}}*/
+    entity SPLIT {
+        key FILENAME   : String(64);
+        key PAGENUMBER : Integer;
+            TYPE       : String(10);
+            CONTENT    : LargeBinary;
     };
 };
