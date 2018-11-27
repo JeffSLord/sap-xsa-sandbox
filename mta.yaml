@@ -32,11 +32,7 @@ modules:
     path: hdb_cds
     requires:
       - name: hdi_hdb_cds
-  - name: hdb_ta
-    type: hdb
-    path: hdb_ta
-    requires:
-      - name: hdi_hdb_ta
+  
   - name: nodexsjs
     type: nodejs
     path: nodexsjs
@@ -46,15 +42,7 @@ modules:
           url: '${default-url}'
     requires:
       - name: hdi_hdb_cds
-  - name: master_detail
-    type: html5
-    path: master_detail
-    requires:
-      - name: nodexsjs_api
-        group: destinations
-        properties:
-          name: nodexsjs_be
-          url: '~{url}'
+  
 resources:
   - name: hdi_hdb_cds
     properties:
