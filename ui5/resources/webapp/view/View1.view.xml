@@ -1,7 +1,7 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:action="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="sandbox.ui5.controller.View1" displayBlock="true">
 	<App id="idAppControl">
 		<pages>
-			<Page title="{testModel>/test1}" id="__page8" showFooter="false" navButtonType="Emphasized" navButtonPress="action" action:wiring="\{'navButtonPress':\{'navigation':\{'routeName':'View1'\}\}\}">
+			<Page title="{appModel>/appName}" id="__page8" showFooter="false" navButtonType="Emphasized" navButtonPress="action" action:wiring="\{'navButtonPress':\{'navigation':\{'routeName':'View1'\}\}\}">
 				<content>
 					<NavContainer id="__container5">
 						<pages>

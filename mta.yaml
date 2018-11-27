@@ -10,6 +10,8 @@ modules:
       - name: node_api
         properties:
           url: '${default-url}'
+    requires:
+      - name: hdb_cds
   - name: ui5
     type: html5
     path: ui5

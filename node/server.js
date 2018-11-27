@@ -22,27 +22,7 @@ app.get("/ip", (req, res) => {
 		res.send(body);
 	});
 });
-// var options ={
-// 	url:"http://httpbin.org/ip",
-// 	headers:{
-		
-// 	}
-// };
-// app.use("/r1", require("./routes/r1"));
-// app.use("/r2", require("./routes/r2"));
-app.use("/ocr", require("./routes/ocr"));
-// app.use("/security", require("./routes/security"));
-
-
-
-// // old version requiring 'target' to be set in xs-app.json
-// app.get('/', (req, res) => {
-// 	res.send("it works!");
-// });
-// app.get('/hey', (req, res) => {
-// 	res.send("hi there.");
-// });
-// //
+app.use("/ocr", require("./routes/ocr.route"));
 
 
 var port = process.env.PORT || 3000;

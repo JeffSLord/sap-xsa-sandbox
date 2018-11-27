@@ -1,0 +1,14 @@
+PROCEDURE "sap_xsa_sandbox.hdb_cds.procedures::SP_DELETE_LINES"( 
+	IN FILENAME STRING
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+	delete from "sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" where "FILENAME" = FILENAME;
+
+   /*************************************
+       Write your procedure logic 
+   *************************************/
+END

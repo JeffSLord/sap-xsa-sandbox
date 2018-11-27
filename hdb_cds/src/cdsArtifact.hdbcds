@@ -16,7 +16,6 @@ context Docs {
         key PAGE_NUMBER    : Integer    not null;
             PAGE_CONTENT   : LargeBinary;
     };
-    
 };
 
 @OData.publish : true
