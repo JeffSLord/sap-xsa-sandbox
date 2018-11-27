@@ -2,10 +2,10 @@ var express = require("express");
 var router = express.Router();
 var hdbext = require("@sap/hdbext");
 var hanaConfig = {
-	host: 'ec2-54-158-20-168.compute-1.amazonaws.com',
-	port: 30015,
-	user: 'jeff',
-	password: 'Hana12345'
+	host: process.env.DB_HOST,
+	port: process.env.DB_PORT,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS
 };
 
 exports.line_get = (req, res, next) => {

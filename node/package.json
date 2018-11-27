@@ -5,7 +5,8 @@
 		"@sap/textanalysis": "x",
 		"@sap/hdbext": "x",
 		"body-parser": "x",
-		"form-data": "x"
+		"form-data": "x",
+		"dotenv" : "x"
 	},
 	"devDependencies": {
 		"gulp": "3.9.1",
