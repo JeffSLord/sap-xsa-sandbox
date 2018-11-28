@@ -7,18 +7,5 @@ PROCEDURE "sap_xsa_sandbox.hdb_cds.procedures::SP_DELETE_EMPTY_LINES"(
    --DEFAULT SCHEMA <default_schema_name>
    AS
 BEGIN
-   /*************************************
-       Write your procedure logic 
-   *************************************/
-   --lt_nonempty = select * from "sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" where TEXT
-	-- DECLARE v_count integer;
-	-- DEclARE OUT_INT integer;
-	-- v_tab = select * from "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES";
-	-- select count(*) into OUT_INT from "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES";
-	-- OUT_INT = 1;
--- 	IF v_count=0 THEN 
--- 		DELETE FROM "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES";
--- 	END IF;
 	delete from "sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" where "FILENAME" = FILENAME AND ltrim(rtrim("TEXT")) = '';
-	-- select * from "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES" where ltrim(rtrim("YOUR_COLUMN")) = '';
 END

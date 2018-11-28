@@ -83,8 +83,8 @@ exports.line_delete = (req, res, next) => {
 						console.log("[ERROR] ", err);
 						res.status(500).send("[ERROR] ", err);
 					} else {
-						console.log("[SUCCESS] Delete successful.");
-						res.send("[SUCCESS] Delete successful.");
+						console.log("[SUCCESS] Delete lines successful.");
+						res.send("[SUCCESS] Delete lines successful.");
 					}
 				});
 			}

@@ -15,7 +15,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			// This model 
 			var oModel = new sap.ui.model.json.JSONModel();
 			oModel.setData({
-				fileName: "",
+				fileName:"",
 				text: "",
 				cleanText:"",
 				lines: [],
@@ -123,7 +123,19 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			textPanel.setExpanded(true);
 			textPanel.setBusy(true);
 			tablePanel.setBusy(true);
-			console.log("[INFO] Calling ocr api with options...");
+			console.log("[INFO] Calling OCR API with custom options...");
+			
+			// $.ajax({
+			// 	url: '/node/ocr/',
+			// 	type:'get',
+			// 	success: () =>{
+			// 		console.log("Sucessful get.");
+			// 	},
+			// 	error: (err) =>{
+			// 		console.log("Error getting.", err);
+			// 	}
+			// });
+			
 			$.ajax({
 				url: 'https://sandbox.api.sap.com/ml/ocr/ocr/',
 				timeout: 360000,
@@ -166,15 +178,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 							this.getView().getModel('lineModel').refresh();
 							console.log("[INFO] Line model refreshed.");
 							console.log("[INFO] Inserting page to table...");
-							var newData = {
-								fileName: oModel.getProperty('/fileName'),
-								text: cleanString
-							};
 							// Insert to Page table (Filename, text)
 							$.ajax({
 								url: '/node/ocr/page/',
 								type: 'post',
-								data: newData,
+								data: {
+									fileName: oModel.getProperty('/fileName'),
+									text: oModel.getProperty('/cleanText')
+								},
 								success: (data) => {
 									console.log("[INFO] Successfully inserted page.");
 								},
@@ -184,17 +195,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 							});
 							console.log("[INFO] Inserting lines to table...");
 							for (var i = 0; i < cleanedArr.length; i++) {
-								var newData = {
-									fileName: oModel.getProperty('/fileName'),
-									pageNum: '1',
-									lineNum: i,
-									line: cleanedArr[i]
-								};
 								$.ajax({
 									url: '/node/ocr/line/',
 									timeout: 3600,
 									type: 'post',
-									data: newData,
+									data: {
+										fileName: oModel.getProperty('/fileName'),
+										pageNum: '1',
+										lineNum: i,
+										line: cleanedArr[i]
+									},
 									success: (data) => {
 										this.getView().getModel('lineModel').refresh();
 									},
@@ -224,7 +234,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 				}
 			});
 		},
-
 		cleanLines: function(lines) {
 			var cleaned = "";
 			var cleaned = [];
