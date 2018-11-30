@@ -15,14 +15,18 @@ app.use((req, res, next) => {
 	next();
 });
 
+// Handle get at path '/'
 app.get("/", (req, res) => {
-	res.send("Please go to /r1 or /r2.");
+	res.send("Welcome to my application.");
 });
+// Handle get at path '/ip'
 app.get("/ip", (req, res) => {
 	request("http://httpbin.org/ip", (err, res2, body) => {
 		res.send(body);
 	});
 });
+// Use a route file that we created
+// All paths inside this ocr.route file will be prefixed with '/ocr' to access
 app.use("/ocr", require("./routes/ocr.route"));
 
 

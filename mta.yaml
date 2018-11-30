@@ -12,6 +12,7 @@ modules:
           url: '${default-url}'
     requires:
       - name: hdb_cds
+      - name: hdi_hdb_cds
   - name: ui5
     type: html5
     path: ui5

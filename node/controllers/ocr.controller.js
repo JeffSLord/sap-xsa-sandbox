@@ -1,5 +1,3 @@
-var express = require("express");
-var router = express.Router();
 var hdbext = require("@sap/hdbext");
 var hanaConfig = {
 	host: process.env.DB_HOST,
