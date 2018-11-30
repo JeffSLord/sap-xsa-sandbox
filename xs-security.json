@@ -8,6 +8,10 @@
 		{
 			"name" : "$XSAPPNAME.Edit",
 			"description" : "Edit data"
+		},
+		{
+			"name": "$XSAPPNAME.Run",
+			"description":"Run the app"
 		}
 	],
 	"attributes" : [
@@ -23,6 +27,11 @@
 			"description" : "Template for reading sandbox",
 			"scope-references" : ["$XSAPPNAME.Read"],
 			"attribute-references" : ["Field1"]
+		}, 
+		{
+			"name" : "SandboxAdmin",
+			"description" : "Template for running application",
+			"scope-references" : ["$XSAPPNAME.Run", "$XSAPPNAME.Read", "$XSAPPNAME.Edit"]
 		}
 	]
 }

@@ -1,6 +1,9 @@
 var express = require('express');
-var request = require('request');
 var bodyParser = require('body-parser');
+const passport=require("passport");
+const {JWTStrategy}=require("@sap/xssec");
+const xsenv = require("@sap/xsenv");
+const services = xsenv.getServices({uaa: "jeffauthorization-uaa"});
 require('dotenv').config();
 
 // var xsenv = require('@sap/xsenv');
@@ -10,24 +13,20 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+// Set passport strategy (authentication method) as JWT based on the uaa services
+passport.use(new JWTStrategy(services.uaa));
+app.use(passport.initialize());
+app.use(passport.authenticate("JWT", {session:false}));
+
 app.use((req, res, next) => {
 	req.requestTime = Date.now();
 	next();
 });
-
-// Handle get at path '/'
-app.get("/", (req, res) => {
-	res.send("Welcome to my application.");
-});
-// Handle get at path '/ip'
-app.get("/ip", (req, res) => {
-	request("http://httpbin.org/ip", (err, res2, body) => {
-		res.send(body);
-	});
-});
-// Use a route file that we created
-// All paths inside this ocr.route file will be prefixed with '/ocr' to access
+app.use("/", require("./routes/default.route"));
 app.use("/ocr", require("./routes/ocr.route"));
+app.get("/security", (req, res) => {
+	res.send(`Successful authentication as ${req.user.id}`);
+});
 
 
 var port = process.env.PORT || 3000;

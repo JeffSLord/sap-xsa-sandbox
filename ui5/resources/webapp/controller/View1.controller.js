@@ -64,6 +64,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 		/**
 		 *@memberOf sandbox.ui5.controller.View1
 		 */
+		 testButton: function() {
+		 	
+		 },
 		copyButton: function() {
 			var txt = this.getView().byId("ocrText").getText();
 			navigator.clipboard.writeText(txt).then(function() {
@@ -124,17 +127,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			textPanel.setBusy(true);
 			tablePanel.setBusy(true);
 			console.log("[INFO] Calling OCR API with custom options...");
-			
-			// $.ajax({
-			// 	url: '/node/ocr/',
-			// 	type:'get',
-			// 	success: () =>{
-			// 		console.log("Sucessful get.");
-			// 	},
-			// 	error: (err) =>{
-			// 		console.log("Error getting.", err);
-			// 	}
-			// });
 			
 			$.ajax({
 				url: 'https://sandbox.api.sap.com/ml/ocr/ocr/',

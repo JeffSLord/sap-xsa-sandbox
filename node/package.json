@@ -4,9 +4,12 @@
 		"request": "2.x",
 		"@sap/textanalysis": "x",
 		"@sap/hdbext": "x",
+		"@sap/xssec": "x",
+		"@sap/xsenv": "x",
 		"body-parser": "x",
 		"form-data": "x",
-		"dotenv" : "x"
+		"dotenv" : "x",
+		"passport" : "x"
 	},
 	"devDependencies": {
 		"gulp": "3.9.1",

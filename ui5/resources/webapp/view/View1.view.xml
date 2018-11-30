@@ -47,8 +47,11 @@
 																	<sap.ui.core:ListItem text="all" key="all" id="__m4"/>
 																</items>
 															</Select>
-															<Button text="Process" width="auto" id="__button2" press="uploadFile"/>
+															<Button text="Process" width="auto" id="__button2" press="uploadFile" icon="sap-icon://accept"/>
 															<BusyIndicator busy="true" busyIndicatorDelay="0" text="Please wait..." id="busyIndicator" visible="false"/>
+														<items>
+														    <Button text="TEST" width="auto" id="testButton" icon="sap-icon://activate"/>
+														</items>
 														</VBox>
 														<!--</sap.ui.layout:content>-->
 														<!--</sap.ui.layout:HorizontalLayout>-->

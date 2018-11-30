@@ -13,6 +13,7 @@ modules:
     requires:
       - name: hdb_cds
       - name: hdi_hdb_cds
+      - name: jeffauthorization-uaa
   - name: ui5
     type: html5
     path: ui5
@@ -22,12 +23,14 @@ modules:
         properties:
           name: node-be
           url: '~{url}'
+          forwardAuthToken: true
       - name: hdb_cds
       - name: nodexsjs_api
         properties:
           name: nodexsjs_be
           url: '~{url} '
         group: destinations
+      - name: jeffauthorization-uaa
   - name: hdb_cds
     type: hdb
     path: hdb_cds
@@ -55,3 +58,7 @@ resources:
     type: org.cloudfoundry.user-provided-service
     parameters:
       service-name: SANDBOX_OCR
+  - name: jeffauthorization-uaa
+    type: com.sap.xs.uaa
+    parameters:
+      path: /xs-security.json
