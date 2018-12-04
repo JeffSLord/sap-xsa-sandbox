@@ -8,7 +8,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			console.log("INITING");
 			var oModel = new sap.ui.model.json.JSONModel();
 			oModel.setData({
-				appName: "Demo Application",
+				appName: "Demo OCR Application",
 				test2: "application"
 			});
 			this.getView().setModel(oModel, "appModel");
@@ -65,7 +65,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 		 *@memberOf sandbox.ui5.controller.View1
 		 */
 		 testButton: function() {
-		 	
+		 	$.ajax({
+		 		url: '/node/ocr/'
+		 	});
 		 },
 		copyButton: function() {
 			var txt = this.getView().byId("ocrText").getText();
