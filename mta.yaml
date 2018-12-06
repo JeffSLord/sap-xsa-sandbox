@@ -45,6 +45,11 @@ modules:
           url: '${default-url}'
     requires:
       - name: hdi_hdb_cds
+
+  - name: react_test
+    type: html5
+    path: react_test
+
 resources:
   - name: hdi_hdb_cds
     properties:
