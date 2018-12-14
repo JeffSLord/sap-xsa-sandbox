@@ -66,7 +66,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 		 */
 		 testButton: function() {
 		 	$.ajax({
-		 		url: '/node/ocr/'
+		 		url: '/node/ocr/line/',
+		 		type:'get',
+		 		success: () =>{
+		 			console.log("line_get successful");
+		 		},
+		 		error: (err) =>{
+		 			console.log("line_get failed",err);
+		 		}
 		 	});
 		 },
 		copyButton: function() {

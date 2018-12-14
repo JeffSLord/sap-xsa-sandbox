@@ -1,20 +1,27 @@
-var hdbext = require("@sap/hdbext");
+const hdbext = require("@sap/hdbext");
+const xsenv = require("@sap/xsenv");
 const auth = require("./auth.controller");
-var hanaConfig = {
-	host: process.env.DB_HOST,
-	port: process.env.DB_PORT,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASS
-};
+const services =  xsenv.getServices({hanaConfig: {tag: "hana"}});
+// const express = require('express');
+// const router = express.Router();
+
+
+// var hanaConfig = {
+// 	host: process.env.DB_HOST,
+// 	port: process.env.DB_PORT,
+// 	user: process.env.DB_USER,
+// 	password: process.env.DB_PASS
+// };
+
 
 exports.line_get = (req, res, next) => {
 	console.log("[INFO] Call line_get.");
-	hdbext.createConnection(hanaConfig, (err, client) => {
+	hdbext.createConnection(services.hanaConfig, (err, client) => {
 		if (err) {
 			console.error(err);
 			res.status(500).send("[ERROR] ", err);
 		}
-		client.exec(`SELECT * FROM "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES"`, (err, res) => {
+		client.exec(`SELECT * FROM "CongressMarks.LINES"`, (err, res) => {
 			client.end();
 			if (err) {
 				console.error(err);
