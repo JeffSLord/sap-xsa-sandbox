@@ -1,37 +1,28 @@
 {
-	"xsappname" : "SandboxApp",
-	"scopes" : [
-		{
-			"name" : "$XSAPPNAME.Read",
-			"description" : "Read data"
-		},
-		{
-			"name" : "$XSAPPNAME.Edit",
-			"description" : "Edit data"
-		},
-		{
-			"name": "$XSAPPNAME.Run",
-			"description":"Run the app"
-		}
-	],
-	"attributes" : [
-		{
-			"name" : "Field1",
-			"description" : "Field restriction",
-			"valueType" : "string"
-		}
-		],
-	"role-templates" : [
-		{
-			"name" : "SandboxReader",
-			"description" : "Template for reading sandbox",
-			"scope-references" : ["$XSAPPNAME.Read"],
-			"attribute-references" : ["Field1"]
-		}, 
-		{
-			"name" : "SandboxAdmin",
-			"description" : "Template for running application",
-			"scope-references" : ["$XSAPPNAME.Run", "$XSAPPNAME.Read", "$XSAPPNAME.Edit"]
-		}
-	]
+	"xsappname": "SandboxApp",
+	"scopes": [{
+		"name": "$XSAPPNAME.Read",
+		"description": "Read data"
+	}, {
+		"name": "$XSAPPNAME.Edit",
+		"description": "Edit data"
+	}, {
+		"name": "$XSAPPNAME.Run",
+		"description": "Run the app"
+	}],
+	"attributes": [{
+		"name": "Field1",
+		"description": "Field restriction",
+		"valueType": "string"
+	}],
+	"role-templates": [{
+		"name": "SandboxReader",
+		"description": "Template for reading sandbox",
+		"scope-references": ["$XSAPPNAME.Read"],
+		"attribute-references": ["Field1"]
+	}, {
+		"name": "SandboxAdmin",
+		"description": "Template for running application",
+		"scope-references": ["$XSAPPNAME.Run", "$XSAPPNAME.Read", "$XSAPPNAME.Edit"]
+	}]
 }

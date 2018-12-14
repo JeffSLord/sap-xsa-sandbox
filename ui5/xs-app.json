@@ -5,16 +5,12 @@
 		"source": "/node/(.*)",
 		"destination": "node-be",
 		"target": "$1",
-		"authenticationType": "none",
+		"authenticationType": "xsuaa",
 		"csrfProtection": true
 	}, {
-		"source": "/xsodata/lines.xsodata/",
+		"source": "(.*).xsodata(.*)",
 		"destination": "nodexsjs_be",
-		"authenticationType":"xsuaa",
-		"scope" : "$XSAPPNAME.Read"
-	},{
-		"source":"/xsodata/lines2.xsodata/",
-		"destination":"node-be"
-	}
-	]
+		"authenticationType": "xsuaa",
+		"scope": "$XSAPPNAME.Read"
+	}]
 }

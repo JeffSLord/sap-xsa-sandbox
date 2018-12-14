@@ -1,0 +1,4 @@
+service{
+	"Docs.DOCUMENTS" as "DOCUMENTS";
+	"Docs.SPLIT" as "SPLIT";
+}

@@ -1,0 +1,5 @@
+service{
+	"CongressMarks.LINES" as "LINES";
+	"CongressMarks.PAGES" as "PAGES";
+	"CongressMarks.SPLIT" as "SPLIT";
+}

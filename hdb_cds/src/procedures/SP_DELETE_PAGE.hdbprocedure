@@ -1,4 +1,4 @@
-PROCEDURE "sap_xsa_sandbox.hdb_cds.procedures::SP_DELETE_PAGE"(
+PROCEDURE "SP_DELETE_PAGE"(
 	IN FILENAME STRING
 )
    LANGUAGE SQLSCRIPT
@@ -6,5 +6,5 @@ PROCEDURE "sap_xsa_sandbox.hdb_cds.procedures::SP_DELETE_PAGE"(
    --DEFAULT SCHEMA <default_schema_name>
    AS
 BEGIN
-   DELETE FROM "sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES" WHERE "FILENAME" = FILENAME;
+   DELETE FROM "CongressMarks.PAGES" WHERE "FILENAME" = FILENAME;
 END
