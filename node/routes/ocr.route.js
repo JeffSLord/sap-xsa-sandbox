@@ -88,6 +88,7 @@ router.delete('/line', (req, res, next) => {
 		res.end('{}');
 	} else {
 		var fileName = req.body.fileName;
+		console.log("[INFO] To delete, ", fileName);
 		hdbext.createConnection(services.hanaConfig, (err, client) => {
 			if (err) {
 				console.error("[ERROR] ", err);
@@ -99,7 +100,7 @@ router.delete('/line', (req, res, next) => {
 					res.status(500).send("[ERROR] ", err);
 				} else {
 					statement.exec({
-						FILENAME: fileName
+						IN_FILE: fileName
 					}, (err, parameters) => {
 						if (err) {
 							console.log("[ERROR] ", err);

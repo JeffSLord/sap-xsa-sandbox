@@ -184,6 +184,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 						success: (res, status, xhr) => {
 							var csrf_token = xhr.getResponseHeader('x-csrf-token');
 							console.log(csrf_token);
+							console.log("To delete ", oModel.getProperty('/fileName'));
 							$.ajax({
 								headers: {
 									'x-csrf-token': csrf_token
