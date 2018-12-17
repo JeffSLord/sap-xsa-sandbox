@@ -6,7 +6,7 @@
 		"destination": "node-be",
 		"target": "$1",
 		"authenticationType": "xsuaa",
-		"csrfProtection": true
+		"scope":"$XSAPPNAME.Edit"
 	}, {
 		"source": "(.*).xsodata(.*)",
 		"destination": "nodexsjs_be",

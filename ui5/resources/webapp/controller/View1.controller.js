@@ -1,10 +1,10 @@
-sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
+sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 	"use strict";
 	return Controller.extend("sandbox.ui5.controller.View1", {
 		/**
 		 *@memberOf sandbox.ui5.controller.View1
 		 */
-		onInit: function() {
+		onInit: function () {
 			console.log("INITING");
 			var oModel = new sap.ui.model.json.JSONModel();
 			oModel.setData({
@@ -15,27 +15,27 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			// This model 
 			var oModel = new sap.ui.model.json.JSONModel();
 			oModel.setData({
-				fileName:"",
+				fileName: "",
 				text: "",
-				cleanText:"",
+				cleanText: "",
 				lines: [],
 				cleanLines: []
 			});
 			this.getView().setModel(oModel, "currentFileModel");
-			var oModel = new sap.ui.model.odata.v2.ODataModel("/xsodata/lines.xsodata/");
+			var oModel = new sap.ui.model.odata.v2.ODataModel("/xsodata/CongressMarks.xsodata/");
 			this.getView().setModel(oModel, "lineModel");
 			var oTable = this.getView().byId("sTable");
 			oTable.setModel(oModel);
 		},
-		onAfterRendering: function() {
+		onAfterRendering: function () {
 			console.log("done rendering.");
 		},
-		action: function(oEvent) {
+		action: function (oEvent) {
 			var that = this;
 			var actionParameters = JSON.parse(oEvent.getSource().data("wiring").replace(/'/g, "\""));
 			var eventType = oEvent.getId();
 			var aTargets = actionParameters[eventType].targets || [];
-			aTargets.forEach(function(oTarget) {
+			aTargets.forEach(function (oTarget) {
 				var oControl = that.byId(oTarget.id);
 				if (oControl) {
 					var oParams = {};
@@ -48,7 +48,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			var oNavigation = actionParameters[eventType].navigation;
 			if (oNavigation) {
 				var oParams = {};
-				(oNavigation.keys || []).forEach(function(prop) {
+				(oNavigation.keys || []).forEach(function (prop) {
 					oParams[prop.name] = encodeURIComponent(JSON.stringify({
 						value: oEvent.getSource().getBindingContext(oNavigation.model).getProperty(prop.name),
 						type: prop.type
@@ -64,28 +64,33 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 		/**
 		 *@memberOf sandbox.ui5.controller.View1
 		 */
-		 testButton: function() {
-		 	$.ajax({
-		 		url: '/node/ocr/line/',
-		 		type:'get',
-		 		success: () =>{
-		 			console.log("line_get successful");
-		 		},
-		 		error: (err) =>{
-		 			console.log("line_get failed",err);
-		 		}
-		 	});
-		 },
-		copyButton: function() {
+		testButton: function () {
+			$.ajax({
+				headers: {
+					"X-CSRF-Token": "Fetch"
+				},
+				url: '/node/ocr/',
+				type: 'get',
+				success: (res, status, xhr) => {
+					var csrf_token = xhr.getResponseHeader('x-csrf-token');
+					// var header_xcsrf_token = data.headers['x-csrf-token'];
+					console.log(csrf_token);
+				},
+				error: (err) => {
+					console.log(err);
+				}
+			});
+		},
+		copyButton: function () {
 			var txt = this.getView().byId("ocrText").getText();
-			navigator.clipboard.writeText(txt).then(function() {
+			navigator.clipboard.writeText(txt).then(function () {
 				console.log('Async: Copying to clipboard was successful!');
 				sap.m.MessageToast.show("Text copied to clipboard.", {});
-			}, function(err) {
+			}, function (err) {
 				console.error('Async: Could not copy text: ', err);
 			});
 		},
-		uploadFile: function(oEvent) {
+		uploadFile: function (oEvent) {
 			// Collect input data
 			var fileUploader = this.getView().byId("fileUploader");
 			var busyIndicator = this.getView().byId("busyIndicator");
@@ -136,7 +141,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 			textPanel.setBusy(true);
 			tablePanel.setBusy(true);
 			console.log("[INFO] Calling OCR API with custom options...");
-			
+
+			// const csrfToken = this.getCookie('x-csrf-token');
+			// console.log(csrfToken);
 			$.ajax({
 				url: 'https://sandbox.api.sap.com/ml/ocr/ocr/',
 				timeout: 360000,
@@ -169,57 +176,77 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 					oModel.setProperty('/cleanText', cleanString);
 					console.log("[INFO] Deleting line table...");
 					$.ajax({
-						url: '/node/ocr/line/',
-						timeout: 360000,
-						type: 'delete',
-						data: {
-							fileName: oModel.getProperty('/fileName')
+						headers: {
+							"X-CSRF-Token": "Fetch"
 						},
-						success: () => {
-							this.getView().getModel('lineModel').refresh();
-							console.log("[INFO] Line model refreshed.");
-							console.log("[INFO] Inserting page to table...");
-							// Insert to Page table (Filename, text)
+						url: '/node/ocr/',
+						type: 'get',
+						success: (res, status, xhr) => {
+							var csrf_token = xhr.getResponseHeader('x-csrf-token');
+							console.log(csrf_token);
 							$.ajax({
-								url: '/node/ocr/page/',
-								type: 'post',
-								data: {
-									fileName: oModel.getProperty('/fileName'),
-									text: oModel.getProperty('/cleanText')
+								headers: {
+									'x-csrf-token': csrf_token
 								},
-								success: (data) => {
-									console.log("[INFO] Successfully inserted page.");
+								url: '/node/ocr/line/',
+								timeout: 360000,
+								type: 'delete',
+								data: {
+									fileName: oModel.getProperty('/fileName')
+								},
+								success: () => {
+									this.getView().getModel('lineModel').refresh();
+									console.log("[INFO] Line model refreshed.");
+									console.log("[INFO] Inserting page to table...");
+									// Insert to Page table (Filename, text)
+									$.ajax({
+										url: '/node/ocr/page/',
+										type: 'post',
+										headers: {
+											'x-csrf-token': csrf_token
+										},
+										data: {
+											fileName: oModel.getProperty('/fileName'),
+											text: oModel.getProperty('/cleanText')
+										},
+										success: (data) => {
+											console.log("[INFO] Successfully inserted page.");
+										},
+										error: (err) => {
+											console.log("[ERROR] Inserting page: ", err);
+										}
+									});
+									console.log("[INFO] Inserting lines to table...");
+									for (var i = 0; i < cleanedArr.length; i++) {
+										$.ajax({
+											url: '/node/ocr/line/',
+											timeout: 3600,
+											type: 'post',
+											headers: {
+												'x-csrf-token': csrf_token
+											},
+											data: {
+												fileName: oModel.getProperty('/fileName'),
+												pageNum: '1',
+												lineNum: i,
+												line: cleanedArr[i]
+											},
+											success: (data) => {
+												this.getView().getModel('lineModel').refresh();
+											},
+											error: (err) => {
+												console.log("[ERROR] Inserting line:", err);
+											}
+										});
+									}
 								},
 								error: (err) => {
-									console.log("[ERROR] Inserting page: ", err);
+									console.log("[ERROR] Deleting table:", err);
 								}
 							});
-							console.log("[INFO] Inserting lines to table...");
-							for (var i = 0; i < cleanedArr.length; i++) {
-								$.ajax({
-									url: '/node/ocr/line/',
-									timeout: 3600,
-									type: 'post',
-									data: {
-										fileName: oModel.getProperty('/fileName'),
-										pageNum: '1',
-										lineNum: i,
-										line: cleanedArr[i]
-									},
-									success: (data) => {
-										this.getView().getModel('lineModel').refresh();
-									},
-									error: (err) => {
-										console.log("[ERROR] Inserting line:", err);
-									}
-								});
-							}
-						},
-						error: (err) => {
-							console.log("[ERROR] Deleting table:", err);
 						}
 					});
-					
+
 					// Update UI, refresh models
 					oModel.refresh();
 					this.getView().getModel('lineModel').refresh();
@@ -235,7 +262,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 				}
 			});
 		},
-		cleanLines: function(lines) {
+		cleanLines: function (lines) {
 			var cleaned = "";
 			var cleaned = [];
 			for (var i = 0; i < lines.length; i++) {
@@ -244,6 +271,19 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function(Controller) {
 				}
 			}
 			return cleaned;
+		},
+		getCookie: function (name) {
+			if (!document.cookie) {
+				return null;
+			}
+			const xsrfCookies = document.cookie.split(';')
+				.map(c => c.trim())
+				.filter(c => c.startsWith(name + '='));
+
+			if (xsrfCookies.length === 0) {
+				return null;
+			}
+			return decodeURIComponent(xsrfCookies[0].split('=')[1]);
 		}
 	});
 });

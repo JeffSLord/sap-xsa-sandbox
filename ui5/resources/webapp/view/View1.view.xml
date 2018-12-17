@@ -74,7 +74,7 @@
 									</Panel>
 									<Panel id="tablePanel" headerText="Table" expandable="true" expanded="true">
 									    <content>
-									        <sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" header="OCR Table" enableAutoBinding="true" id="sTable" entitySet="LINES" initiallyVisibleFields="FILENAME,LINENUMBER,PAGENUMBER,TEXT" tableType="ResponsiveTable"/>
+									        <sap.ui.comp.smarttable:SmartTable xmlns:sap.ui.comp.smarttable="sap.ui.comp.smarttable" width="100%" direction="Column" fitContainer="true" header="OCR Table" enableAutoBinding="true" id="sTable" entitySet="CongressMarksLines" initiallyVisibleFields="FILENAME,LINENUMBER,PAGENUMBER,TEXT" tableType="ResponsiveTable"/>
 									    </content>
 									</Panel>
 								</content>

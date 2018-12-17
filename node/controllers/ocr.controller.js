@@ -5,15 +5,6 @@ const services =  xsenv.getServices({hanaConfig: {tag: "hana"}});
 // const express = require('express');
 // const router = express.Router();
 
-
-// var hanaConfig = {
-// 	host: process.env.DB_HOST,
-// 	port: process.env.DB_PORT,
-// 	user: process.env.DB_USER,
-// 	password: process.env.DB_PASS
-// };
-
-
 exports.line_get = (req, res, next) => {
 	console.log("[INFO] Call line_get.");
 	hdbext.createConnection(services.hanaConfig, (err, client) => {
@@ -21,14 +12,14 @@ exports.line_get = (req, res, next) => {
 			console.error(err);
 			res.status(500).send("[ERROR] ", err);
 		}
-		client.exec(`SELECT * FROM "CongressMarks.LINES"`, (err, res) => {
+		client.exec(`SELECT * FROM "CongressMarks.LINES"`, (err, qres) => {
 			client.end();
 			if (err) {
 				console.error(err);
 				res.status(500).send("[ERROR] ", err);
 			} else {
 				console.log("[SUCCESS] Select Successful.");
-				res.send(res);
+				res.send(qres);
 			}
 		});
 	});
@@ -48,12 +39,12 @@ exports.line_post = (req, res, next) => {
 		var lineNum = req.body.lineNum;
 		var line = req.body.line;
 		// var query = 'INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)';
-		hdbext.createConnection(hanaConfig, (err, client) => {
+		hdbext.createConnection(services.hanaConfig, (err, client) => {
 			if (err) {
 				console.error("[ERROR] ", err);
 				res.status(500).send("[ERROR] ", err);
 			}
-			client.prepare('INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.LINES" VALUES(?,?,?,?)', (perr,
+			client.prepare('INSERT INTO "CongressMarks.LINES" VALUES(?,?,?,?)', (perr,
 				statement) => {
 				if (err) {
 					console.error("[ERROR] ", perr);
@@ -81,12 +72,12 @@ exports.line_post = (req, res, next) => {
 exports.line_delete = (req, res, next) => {
 	console.log("[INFO] Call line_delete.");
 	var fileName = req.body.fileName;
-	hdbext.createConnection(hanaConfig, (err, client) => {
+	hdbext.createConnection(services.hanaConfig, (err, client) => {
 		if (err) {
 			console.error("[ERROR] ", err);
 			res.status(500).send("[ERROR] ", err);
 		}
-		client.prepare('call "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds.procedures::SP_DELETE_LINES" (?)', (err, statement) => {
+		client.prepare('call "SP_DELETE_LINES" (?)', (err, statement) => {
 			if (err) {
 				console.error("[ERROR] ", err);
 				res.status(500).send("[ERROR] ", err);
@@ -109,8 +100,8 @@ exports.line_delete = (req, res, next) => {
 exports.page_post = (req, res, next) => {
 	var fileName = req.body.fileName;
 	var text = req.body.text;
-	hdbext.createConnection(hanaConfig, (err, client) => {
-		client.prepare('INSERT INTO "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds::CongressMarks.PAGES" VALUES(?,?)', (err,
+	hdbext.createConnection(services.hanaConfig, (err, client) => {
+		client.prepare('INSERT INTO "CongressMarks.PAGES" VALUES(?,?)', (err,
 			statement) => {
 			if (err) {
 				console.error("[ERROR] Prepare: ", err);
@@ -133,12 +124,12 @@ exports.page_post = (req, res, next) => {
 exports.page_delete = (req, res, next) => {
 	console.log("[INFO] Call page_delete.");
 	var fileName = req.body.fileName;
-	hdbext.createConnection(hanaConfig, (err, client) => {
+	hdbext.createConnection(services.hanaConfig, (err, client) => {
 		if (err) {
 			console.error("[ERROR] ", err);
 			res.status(500).send("[ERROR] ", err);
 		} else {
-			client.prepare('call "XSA_SANDBOX_HDI_HDB_CDS_2"."sap_xsa_sandbox.hdb_cds.procedures::SP_DELETE_PAGE" (?)', (err, statement) => {
+			client.prepare('call "SP_DELETE_PAGE" (?)', (err, statement) => {
 				if (err) {
 					console.error("[ERROR] ", err);
 					res.status(500).send("[ERROR] ", err);

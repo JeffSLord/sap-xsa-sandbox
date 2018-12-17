@@ -29,6 +29,7 @@ modules:
         properties:
           name: nodexsjs_be
           url: '~{url} '
+          forwardAuthToken: true
         group: destinations
       - name: jeffauthorization-uaa
   - name: hdb_cds
